@@ -1,8 +1,10 @@
 # DOTNET20-Examensarbete
 Smesh Workflow Engine
 
+## Useful links
+- [Use the new programming style](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#use-the-new-program-style)
 
-## Security Issues
+## Potential Privacy or Security Issues
 
 ```pwsh
 Windows PowerShell
