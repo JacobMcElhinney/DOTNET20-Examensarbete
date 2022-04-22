@@ -4,7 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-worker.powershell-BAAFC5BB-D811-4B21-84FB-D1580EFAC37A</UserSecretsId>
+    <UserSecretsId>dotnet-worker.powershell-BAAFC5BB-D811-4B21-84FB-D1580EFAC37A</UserSecretsId> <!-- auto generated, different from one smesh app repo instance-->
+    <ServerGarbageCollection>true</ServerGarbageCollection> <!--Keep/discard change? see: https://docs.microsoft.com/en-us/dotnet/core/extensions/workers -->
   </PropertyGroup>
 
   <ItemGroup>
