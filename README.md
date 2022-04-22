@@ -3,6 +3,15 @@ Smesh Workflow Engine
 
 ## Useful links
 - [Use the new programming style](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#use-the-new-program-style)
+- [Debugging](https://docs.microsoft.com/en-us/dotnet/core/tutorials/debugging-with-visual-studio-code?pivots=dotnet-6-0)
+
+## Progress
+
+[Set up for terminal input](https://docs.microsoft.com/en-us/dotnet/core/tutorials/debugging-with-visual-studio-code?pivots=dotnet-6-0):
+Open .vscode/launch.json: 
+```json
+  "console": "integratedTerminal",
+```
 
 ## Potential Privacy or Security Issues
 
