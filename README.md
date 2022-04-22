@@ -5,12 +5,17 @@ Smesh Workflow Engine
 - [Use the new programming style](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#use-the-new-program-style)
 - [Debugging](https://docs.microsoft.com/en-us/dotnet/core/tutorials/debugging-with-visual-studio-code?pivots=dotnet-6-0)
 
-## Progress
+## Notes on Debugging & Release:
 
 [Set up for terminal input](https://docs.microsoft.com/en-us/dotnet/core/tutorials/debugging-with-visual-studio-code?pivots=dotnet-6-0):
 Open .vscode/launch.json: 
 ```json
   "console": "integratedTerminal",
+```
+
+[Use Release build configuration](https://docs.microsoft.com/en-us/dotnet/core/tutorials/debugging-with-visual-studio-code?pivots=dotnet-6-0#use-release-build-configuration)
+```pwsh
+  dotnet run --configuration Release
 ```
 
 ## Potential Privacy or Security Issues
