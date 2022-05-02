@@ -2,6 +2,47 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "Coravel/4.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Memory": "3.1.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "3.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Coravel.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Coravel.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Caching.Abstractions/3.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "3.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Caching.Memory/3.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "3.1.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.0",
+          "Microsoft.Extensions.Options": "3.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Memory.dll": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/6.0.0": {
         "type": "package",
         "dependencies": {
@@ -488,6 +529,51 @@
     }
   },
   "libraries": {
+    "Coravel/4.1.2": {
+      "sha512": "TYK5nJjP16b+MsIFZdDHtMq1KlIxzQZii6zuWev/X3mAfYm2XukofjVOXoipxEKoYeeE0n0ZljmIkyG1q1QweQ==",
+      "type": "package",
+      "path": "coravel/4.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "coravel.4.1.2.nupkg.sha512",
+        "coravel.nuspec",
+        "lib/netstandard2.0/Coravel.dll",
+        "lib/netstandard2.0/Coravel.xml"
+      ]
+    },
+    "Microsoft.Extensions.Caching.Abstractions/3.1.0": {
+      "sha512": "+R7REEI+Pks1/ITjDdvey+QJzIG3tIYOtrv4RT40UVVe2Y1Sa8pIjJy3MzPZbyXVgOFN3JHFz1UZH8kz04aa5A==",
+      "type": "package",
+      "path": "microsoft.extensions.caching.abstractions/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Abstractions.dll",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Abstractions.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.xml",
+        "microsoft.extensions.caching.abstractions.3.1.0.nupkg.sha512",
+        "microsoft.extensions.caching.abstractions.nuspec",
+        "packageIcon.png"
+      ]
+    },
+    "Microsoft.Extensions.Caching.Memory/3.1.0": {
+      "sha512": "SWVYYFN8K4bUEZAwVbcdxjApYE7JtbjPXIqsQt/vKE243u0qeDuS7bA5hKVr+k5lo2R+BpITe6Mvqmkus2xDRQ==",
+      "type": "package",
+      "path": "microsoft.extensions.caching.memory/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Memory.dll",
+        "lib/netcoreapp3.1/Microsoft.Extensions.Caching.Memory.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.xml",
+        "microsoft.extensions.caching.memory.3.1.0.nupkg.sha512",
+        "microsoft.extensions.caching.memory.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "Microsoft.Extensions.Configuration/6.0.0": {
       "sha512": "tq2wXyh3fL17EMF2bXgRhU7JrbO3on93MRKYxzz4JzzvuGSA1l0W3GI9/tl8EO89TH+KWEymP7bcFway6z9fXg==",
       "type": "package",
@@ -1219,6 +1305,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Coravel >= 4.1.2",
       "Microsoft.Extensions.Hosting >= 6.0.1"
     ]
   },
@@ -1266,6 +1353,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Coravel": {
+            "target": "Package",
+            "version": "[4.1.2, )"
+          },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",
             "version": "[6.0.1, )"
