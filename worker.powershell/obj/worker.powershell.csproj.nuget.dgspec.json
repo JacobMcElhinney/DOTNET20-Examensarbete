@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj": {}
+    "C:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj": {}
   },
   "projects": {
-    "c:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj": {
+    "C:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj",
+        "projectUniqueName": "C:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj",
         "projectName": "worker.powershell",
-        "projectPath": "c:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj",
+        "projectPath": "C:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\worker.powershell.csproj",
         "packagesPath": "C:\\Users\\jacob\\.nuget\\packages\\",
-        "outputPath": "c:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\obj\\",
+        "outputPath": "C:\\Custom\\Repositories\\Sprinto\\DOTNET20-Examensarbete\\worker.powershell\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
