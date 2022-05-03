@@ -18,7 +18,7 @@ public class Worker : BackgroundService
         {
             _logger.LogInformation($"Worker has run {logEntryCount} times", DateTimeOffset.Now);
             logEntryCount++;
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(2000, stoppingToken); //! defaut value: 1000ms
         }
     }
 

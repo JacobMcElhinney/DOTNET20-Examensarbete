@@ -44,3 +44,6 @@ C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\obj\Debu
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\obj\Debug\net6.0\worker.powershell.pdb
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\obj\Debug\net6.0\worker.powershell.genruntimeconfig.cache
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\obj\Debug\net6.0\ref\worker.powershell.dll
+C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\Coravel.dll
+C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll

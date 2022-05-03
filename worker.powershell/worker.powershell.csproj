@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-worker.powershell-BAAFC5BB-D811-4B21-84FB-D1580EFAC37A</UserSecretsId> <!-- auto generated, different from one smesh app repo instance-->
-    <ServerGarbageCollection>true</ServerGarbageCollection> <!--Keep/discard change? see: https://docs.microsoft.com/en-us/dotnet/core/extensions/workers -->
+    <ServerGarbageCollection>true</ServerGarbageCollection> <!--Keep/discard change? see origial setting: https://docs.microsoft.com/en-us/dotnet/core/extensions/workers -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Coravel" Version="4.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Coravel" Version="4.1.2" /> <!-- Near-zero config .NET Core library that makes Task Scheduling, Caching, Queuing, Mailing, Event Broadcasting (and more) a breeze!-->
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" /> <!-- worker service template -->
   </ItemGroup>
 </Project>
