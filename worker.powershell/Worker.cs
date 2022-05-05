@@ -3,7 +3,9 @@ namespace worker.powershell;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private int logEntryCount; 
+    
+     //MockData
+     private int logEntryCount { get; set; }
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
@@ -19,9 +21,10 @@ public class Worker : BackgroundService
             _logger.LogInformation($"Worker has run {logEntryCount} times", DateTimeOffset.Now);
             logEntryCount++;
             
-            string path = "./TestScript.ps1"; //! REMOVE VARIABLE: FOR TESTING PURPOSES ONLY
+            string path = "TestScript.ps1"; //! REMOVE VARIABLE: FOR TESTING PURPOSES ONLY
+            System.Console.WriteLine(path);
             PowerShellClient pwshClient = new();
-            var output = pwshClient.Run(path);
+            var output = pwshClient.RunScript(path);
             System.Console.WriteLine($"Output from Worker:{output}");
 
             await Task.Delay(2000, stoppingToken); //! defaut value: 1000ms

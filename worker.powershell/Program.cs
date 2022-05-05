@@ -1,14 +1,9 @@
 using worker.powershell;
 using Coravel;
 
-//Configuration Provider
-IConfiguration config = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.Development.json", true) //! Production: appsettings.json
-    .AddEnvironmentVariables()
-    .Build();
 
-//Dependency injection container
+
+//Add configuration capabilitie
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
@@ -18,6 +13,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<PowerShellClient>(); //! Transient or scoped/singleton or even static class?
     })
     .Build();
+
+
+
 
 host.Services.UseScheduler(scheduler =>
 {

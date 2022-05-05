@@ -3,6 +3,10 @@ namespace worker.powershell
     using System;
     using System.IO;
 
+    /// <summary>
+    /// Enables alternative .env over appsettings.json.
+    /// </summary>
+
     //Conforming to convention of reliance on .env files as in related microservices
     public static class DotEnv
     {
@@ -19,7 +23,12 @@ namespace worker.powershell
                 Environment.SetEnvironmentVariable(subStrings[0], subStrings[1]);
             }
 
-
         }
+
+        //THE FOLLOWING CODE NEEDS TO BE INSERTED AT THE TOP OF PROGRAM.CS
+        // string root = Directory.GetCurrentDirectory();
+        // string dotenv = Path.Combine(root, ".env");
+        // DotEnv.Load(dotenv);
+        // var config = new ConfigurationBuilder().AddEnvironmentVariables().Build();
     }
 }

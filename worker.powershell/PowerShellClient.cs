@@ -6,10 +6,11 @@ namespace worker.powershell
     //! Should I register this class as singleton in DI Container?
     public class PowerShellClient
     {
-        public string Run(string path)
+        public string RunScript (string path)
         {
-
-            }
+            var s= path;
+            System.Console.WriteLine("Script ran");
+            return s;
         }
 
     }
