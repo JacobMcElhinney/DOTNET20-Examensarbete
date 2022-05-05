@@ -13,4 +13,5 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" /> <!-- Exposes configuration capabilities -->
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.3" /> <!-- Includes any and all dependencies PowerShell requires, Invoking PowerShell in-process from a .NET application. -->
   </ItemGroup>
+  
 </Project>
