@@ -1,12 +1,12 @@
 using worker.powershell;
 using Coravel;
 
-//Load .env file
-string root = Directory.GetCurrentDirectory();
-string dotenv = Path.Combine(root, ".env");
-DotEnv.Load(dotenv);
-
-var config = new ConfigurationBuilder().AddEnvironmentVariables().Build();
+//Configuration Provider
+IConfiguration config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.Development.json", true) //! Production: appsettings.json
+    .AddEnvironmentVariables()
+    .Build();
 
 //Dependency injection container
 IHost host = Host.CreateDefaultBuilder(args)
