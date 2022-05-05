@@ -1,14 +1,14 @@
+using System.Collections.ObjectModel;
 using System.Management.Automation;
 
 namespace worker.powershell
 {
-    static class PowerShellClient
+    //! Should I register this class as singleton in DI Container?
+    public class PowerShellClient
     {
-        public static void Run()
+        public string Run(string path)
         {
-            using (var powershell = PowerShell.Create())
-            {
-                powershell.AddScript();
+
             }
         }
 
