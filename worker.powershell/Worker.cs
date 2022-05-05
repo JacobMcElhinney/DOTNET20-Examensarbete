@@ -1,24 +1,28 @@
+using Microsoft.Extensions.Options;
+
 namespace worker.powershell;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    
-     //MockData
-     private int logEntryCount { get; set; }
+    private readonly WorkerOptions _options;
+
+    //MockData
+    private int logEntryCount { get; set; }
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger)
+    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options)
     {
         _logger = logger;
+        _options = options.Value; //resolved from DI Container
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation($"Worker has run {logEntryCount} times", DateTimeOffset.Now);
+            _logger.LogInformation($"{_options.Name} has run {logEntryCount} times", DateTimeOffset.Now);
             logEntryCount++;
             
             string path = "TestScript.ps1"; //! REMOVE VARIABLE: FOR TESTING PURPOSES ONLY

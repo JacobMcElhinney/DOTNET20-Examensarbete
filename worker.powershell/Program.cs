@@ -22,27 +22,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     }).Build();
 
 
-/*
-).ConfigureAppConfiguration((hostingContext, configuration) =>
-    {
-        configuration.Sources.Clear();
-
-        IHostEnvironment env = hostingContext.HostingEnvironment;
-
-        configuration
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
-
-        IConfigurationRoot configurationRoot = configuration.Build();
-
-        WorkerOptions options = new();
-        configurationRoot.GetSection(nameof(WorkerOptions))
-                         .Bind(options);
-
-        Console.WriteLine($"WorkerOptions.Name={options.Name}");
-    })
-*/
-
 host.Services.UseScheduler(scheduler =>
 {
     var jobSchedule = scheduler.Schedule<ProcessOrder>();
