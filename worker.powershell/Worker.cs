@@ -18,6 +18,12 @@ public class Worker : BackgroundService
         {
             _logger.LogInformation($"Worker has run {logEntryCount} times", DateTimeOffset.Now);
             logEntryCount++;
+            
+            string path = "./TestScript.ps1"; //! REMOVE VARIABLE: FOR TESTING PURPOSES ONLY
+            PowerShellClient pwshClient = new();
+            var output = pwshClient.Run(path);
+            System.Console.WriteLine($"Output from Worker:{output}");
+
             await Task.Delay(2000, stoppingToken); //! defaut value: 1000ms
         }
     }
