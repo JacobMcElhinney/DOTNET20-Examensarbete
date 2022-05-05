@@ -17,7 +17,6 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScheduler(); //Register Coravel's scheduler
         services.AddTransient<ProcessOrder>(); //lifetime of service instance resolved registered as transient: new instance constructed on each request.
         services.AddTransient<PowerShellClient>(); //! Transient or scoped/singleton or even static class?
-       
 
     }).Build();
 

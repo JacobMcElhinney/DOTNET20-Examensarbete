@@ -9,6 +9,8 @@ namespace worker.powershell
     {
         //Representing a configuration value in e.g appsettings.Development.json or appsettings.json
         public string Name { get; set; }
+        public string Logging { get; set; }
+
     }
 
     /* DEVELOPER NOTES:

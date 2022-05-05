@@ -15,30 +15,32 @@ public class Worker : BackgroundService
     public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options)
     {
         _logger = logger;
-        _options = options.Value; //resolved from DI Container
+        _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation($"{_options.Name} has run {logEntryCount} times", DateTimeOffset.Now);
-            logEntryCount++;
             
-            string path = "TestScript.ps1"; //! REMOVE VARIABLE: FOR TESTING PURPOSES ONLY
-            System.Console.WriteLine(path);
             PowerShellClient pwshClient = new();
-            var output = pwshClient.RunScript(path);
-            System.Console.WriteLine($"Output from Worker:{output}");
+            var output = pwshClient.RunScript(
+                ScriptParser.GetScriptFromPath(
+                    MockData.ScriptPath));
 
-            await Task.Delay(2000, stoppingToken); //! defaut value: 1000ms
+            if(_options.Logging != "disabled")
+            {
+                System.Console.WriteLine($"Output from Worker:{output}");
+            }
+            
+            await Task.Delay(5000, stoppingToken); //! defaut value: 1000ms
         }
     }
 
     //Called when the worker is started. Allows for asynchronous initialization calls.
     public override Task StartAsync(CancellationToken cancellationToken) 
     {
-        _logger.LogInformation("Worker starting...");
+        if(_options.Logging != "disabled") _logger.LogInformation("Worker starting...");
         return base.StartAsync(cancellationToken);
     }
 
