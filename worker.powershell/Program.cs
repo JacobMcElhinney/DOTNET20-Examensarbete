@@ -1,5 +1,8 @@
 using worker.powershell;
 using Coravel;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+
 
 
 
@@ -11,8 +14,24 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScheduler(); //Register Coravel's scheduler
         services.AddTransient<ProcessOrder>(); //lifetime of service instance resolved registered as transient: new instance constructed on each request.
         services.AddTransient<PowerShellClient>(); //! Transient or scoped/singleton or even static class?
-    })
-    .Build();
+    }).ConfigureAppConfiguration((hostingContext, configuration) =>
+    {
+        configuration.Sources.Clear();
+
+        IHostEnvironment env = hostingContext.HostingEnvironment;
+
+        configuration
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+
+        IConfigurationRoot configurationRoot = configuration.Build();
+
+        WorkerOptions options = new();
+        configurationRoot.GetSection(nameof(WorkerOptions))
+                         .Bind(options);
+
+        Console.WriteLine($"WorkerOptions.Name={options.Name}");
+    }).Build();
 
 
 
