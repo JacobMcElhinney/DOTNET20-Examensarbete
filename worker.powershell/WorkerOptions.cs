@@ -1,9 +1,11 @@
 namespace worker.powershell 
 {
     /// <summary>
-    /// Option class (implementation of Options pattern in .NET) used to read related configuration values in appsettings.Environment.json 
+    /// Option class (implementation of Options pattern in .NET), used to read related configuration values in appsettings.Environment.json 
     /// </summary>
-    public class WorkerOptions
+
+    //Type representation of configuration section in appsettings
+    public class WorkerOptions 
     {
         //Representing a configuration value in e.g appsettings.Development.json or appsettings.json
         public string Name { get; set; }
