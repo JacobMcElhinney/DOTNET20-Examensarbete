@@ -1,6 +1,7 @@
 using Coravel.Invocable;
 using Microsoft.Extensions.Options;
 using worker.powershell;
+using worker.powershell.src.Models;
 /// <summary>
 /// For testing purposes only. Remove from Repository
 /// </summary>
