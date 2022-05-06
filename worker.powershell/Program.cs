@@ -1,10 +1,5 @@
 using worker.powershell;
 using Coravel;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-
-
-
 
 //Add configuration capabilitie
 IHost host = Host.CreateDefaultBuilder(args)
@@ -12,7 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         IConfiguration configurationRoot = context.Configuration; //Provide access to appsettings via merged configuration
         services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
-        
+
         services.AddHostedService<Worker>(); //Add worker service to the container.
         services.AddScheduler(); //Register Coravel's scheduler
         services.AddTransient<ProcessOrder>(); //lifetime of service instance resolved registered as transient: new instance constructed on each request.
