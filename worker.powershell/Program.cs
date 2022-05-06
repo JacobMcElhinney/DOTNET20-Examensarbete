@@ -1,5 +1,8 @@
 using worker.powershell;
 using Coravel;
+using worker.powershell.src.Models;
+using worker.powershell.src.Services;
+using worker.powershell.src.Interfaces;
 
 //Add configuration capabilitie
 IHost host = Host.CreateDefaultBuilder(args)
@@ -8,6 +11,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         IConfiguration configurationRoot = context.Configuration; //Provide access to appsettings via merged configuration
         services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
         services.AddHostedService<Worker>(); //Add worker service to the container.
+        services.AddHttpClient<IProcessService<ProcessStep>, ProcessService>();
         services.AddScheduler(); //Register Coravel's scheduler
         services.AddTransient<ProcessOrder>(); //lifetime of service instance resolved registered as transient: new instance constructed on each request.
         services.AddTransient<PowerShellClient>(); //! Transient or scoped/singleton or even static class?

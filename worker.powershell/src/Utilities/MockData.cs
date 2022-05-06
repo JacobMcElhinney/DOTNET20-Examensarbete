@@ -1,4 +1,4 @@
-namespace worker.powershell
+namespace worker.powershell.src.Utilities
 {
     /// <summary>
     /// Provides mock data for testing during development phase.

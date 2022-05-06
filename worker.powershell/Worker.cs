@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Options;
+using worker.powershell.src.Models;
+using worker.powershell.src.Utilities;
 
 namespace worker.powershell;
 

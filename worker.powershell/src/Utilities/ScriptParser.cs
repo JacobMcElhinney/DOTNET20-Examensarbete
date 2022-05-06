@@ -1,4 +1,4 @@
-namespace worker.powershell
+namespace worker.powershell.src.Utilities
 {
    public static class ScriptParser
    {

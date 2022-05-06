@@ -1,4 +1,4 @@
-namespace worker.powershell
+namespace worker.powershell.src.Utilities
 {
     using System;
     using System.IO;

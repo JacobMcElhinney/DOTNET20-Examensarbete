@@ -445,3 +445,4 @@ C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debu
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Speech.dll
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Threading.AccessControl.dll
 C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\bin\Debug\net6.0\Microsoft.Extensions.Http.dll

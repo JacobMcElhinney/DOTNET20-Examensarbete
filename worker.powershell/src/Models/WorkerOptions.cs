@@ -1,4 +1,4 @@
-namespace worker.powershell 
+namespace worker.powershell.src.Models
 {
     /// <summary>
     /// Option class (implementation of Options pattern in .NET), used to read related configuration values in appsettings.Environment.json 
