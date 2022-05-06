@@ -52,6 +52,10 @@
               "target": "Package",
               "version": "[6.0.1, )"
             },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Microsoft.PowerShell.SDK": {
               "target": "Package",
               "version": "[7.2.3, )"

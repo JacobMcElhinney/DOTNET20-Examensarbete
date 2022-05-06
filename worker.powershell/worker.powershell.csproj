@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Coravel" Version="4.1.2" /> <!-- Near-zero config .NET Core library that makes Task Scheduling, Caching, Queuing, Mailing, Event Broadcasting (and more) a breeze!-->
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" /> <!-- Exposes configuration capabilities -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" /> <!-- Adds IHttpClientFactory to application -->
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.3" /> <!-- Includes any and all dependencies PowerShell requires, Invoking PowerShell in-process from a .NET application. -->
   </ItemGroup>
   

@@ -1,10 +1,14 @@
 using Coravel.Invocable;
 using Microsoft.Extensions.Options;
 using worker.powershell;
-
+/// <summary>
+/// For testing purposes only. Remove from Repository
+/// </summary>
 public class ProcessOrder : IInvocable
 {
     private ILogger<ProcessOrder> _logger;
+
+    //!NOTE TO SELF: No external dependencies. keep classes reusable. Load worker options into Worker class and use that class to manipulate control flow.
     private WorkerOptions _options;
 
     //Instance registered as transient in Program.cs and resolved from it's DI container.
