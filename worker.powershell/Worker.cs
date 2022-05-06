@@ -1,3 +1,4 @@
+using System.Management.Automation;
 using Microsoft.Extensions.Options;
 using worker.powershell.src.Models;
 using worker.powershell.src.Utilities;
@@ -22,32 +23,37 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Worker starting...");
+
         while (!stoppingToken.IsCancellationRequested)
         {
-            
-            PowerShellClient pwshClient = new();
-            var output = pwshClient.RunScript(
+            PowerShellClient powerShellClient = new();
+            var output = await powerShellClient.RunScript(
                 ScriptParser.GetScriptFromPath(
                     MockData.ScriptPath));
 
-            if(_options.Logging != "disabled")
+            if (_options.Logging != "disabled")
             {
-                System.Console.WriteLine($"Output from Worker:{output}");
+                foreach (PSObject item in output)
+                { 
+                    System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString()); 
+                }
             }
-            
-            await Task.Delay(5000, stoppingToken); //! defaut value: 1000ms
+
+
+            await Task.Delay(3000, stoppingToken); //! defaut value: 1000ms
         }
     }
 
     //Called when the worker is started. Allows for asynchronous initialization calls.
-    public override Task StartAsync(CancellationToken cancellationToken) 
+    public override Task StartAsync(CancellationToken cancellationToken)
     {
-        if(_options.Logging != "disabled") _logger.LogInformation("Worker starting...");
+        if (_options.Logging != "disabled") _logger.LogInformation("Worker starting...");
         return base.StartAsync(cancellationToken);
     }
 
     //Called when the worker is stopped. Allows for cleanup calls.
-    public override Task StopAsync(CancellationToken cancellationToken) 
+    public override Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Worker stopping...");
         return base.StopAsync(cancellationToken);

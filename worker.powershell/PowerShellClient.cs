@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 
@@ -12,24 +13,34 @@ namespace worker.powershell
 
             using (PowerShell ps = PowerShell.Create())
             {
-                // specify the script code to run.
-                ps.AddScript(script);
-
-                // execute the script and await the result.
-                var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);
-
-                // print the resulting pipeline objects to the console.
-                foreach (var item in pipelineObjects)
+                try
                 {
-                    System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString());
+                    // specify the script code to run.
+                    ps.AddScript(script);
+
+                    // execute the script and await the result.
+                    var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);
+
+
+                    // print the resulting pipeline objects to the console.
+                    // foreach (var item in pipelineObjects)
+                    // {
+                    //     System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString());
+                    // }
+
+                    return pipelineObjects;
+                }
+                catch (System.Exception error)
+                {
+
+                    return error.Message;
                 }
 
-                return pipelineObjects;
             }
 
         }
 
-
+    
     }
 }
 
