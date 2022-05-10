@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
+using worker.powershell.src.Utilities;
 
 namespace worker.powershell.src.Services
 {
@@ -14,8 +16,22 @@ namespace worker.powershell.src.Services
             _remoteServiceBaseUrl = remoteServiceBaseUrl;
         }
 
-        public Task<ProcessStep> GetPendingSteps()
+        public Task<ProcessStep> GetPendingSteps() //!Borde return type vara process? returnerar proces.steps?
         {
+            // var uri = _remoteServiceBaseUrl + "other dynamic data, see javascript.worker";
+            // try 
+            // {
+            //     //! Will the api return a json object or json stringified?
+            //     var responseString = await _httpClient.GetStringAsync("test");
+            //     var processSteps = JsonConvert.DeserializeObject<ProcessStep>(responseString);
+            //     return processSteps;
+
+            // }
+            // catch(Exception e)
+            // {
+            //     System.Console.WriteLine( e.Message);
+
+            // }
             throw new NotImplementedException();
         }
 
