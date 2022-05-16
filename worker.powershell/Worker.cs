@@ -9,8 +9,8 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
-    
 
+    private string EnvironmentVariables { get; set; }
     //MockData
     private int logEntryCount { get; set; }
 
@@ -32,9 +32,25 @@ public class Worker : BackgroundService
                 const path = require("path");
                 const fetch = require("node-fetch");
             */
-            
+
+            var files = Directory.GetFiles(".");
+            foreach (string file in files)
+            {
+
+                // System.Console.WriteLine("worker directory: " + Path.GetRelativePath(".",file));
+
+            }
+
+            if (EnvironmentVariables == null)
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                System.Console.WriteLine(currentDirectory + _options.Path);
+                EnvironmentVariables = currentDirectory + _options.Path;
+            }
+
 
             PowerShellClient powerShellClient = new();
+            // var path = powerShellClient.RunScript(_options.path)
             var output = await powerShellClient.RunScript(
                 ScriptParser.GetScriptFromPath(
                     MockData.ScriptPath));
@@ -42,8 +58,8 @@ public class Worker : BackgroundService
             if (_options.Logging != "disabled")
             {
                 foreach (PSObject item in output)
-                { 
-                    System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString()); 
+                {
+                    System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString());
                 }
             }
 

@@ -12,6 +12,7 @@ namespace worker.powershell.src.Models
         public string? Version { get; set; }
         public string? Description { get; set; }
         public string? Main { get; set; }
+        public string? Path { get; set; }
 
 
         public string? Logging { get; set; }
