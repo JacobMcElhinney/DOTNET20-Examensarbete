@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.ObjectModel;
 using System.Management.Automation;
+using worker.powershell.src.Interfaces;
 
-namespace worker.powershell
+namespace worker.powershell.src.Services
 {
-    //! Should I register this class as singleton in DI Container?
-    public class PowerShellClient
+    public class PowerShellService : IPowerShellService
     {
-
         public async Task<PSDataCollection<PSObject>> RunScript(string script)
         {
-
-            using (PowerShell ps = PowerShell.Create())
+             using (PowerShell ps = PowerShell.Create())
             {
                 try
                 {
@@ -40,14 +36,6 @@ namespace worker.powershell
                 }
 
             }
-            
-
         }
-
-    
     }
 }
-
-
-
-

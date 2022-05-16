@@ -9,6 +9,7 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
+    private readonly PowerShellClient _powerShellClient;
 
     private string EnvironmentVariables { get; set; }
     //MockData
@@ -16,10 +17,11 @@ public class Worker : BackgroundService
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options)
+    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, PowerShellClient powerShellClient)
     {
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
+        _powerShellClient = powerShellClient;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,6 +34,7 @@ public class Worker : BackgroundService
                 const path = require("path");
                 const fetch = require("node-fetch");
             */
+
 
             var files = Directory.GetFiles(".");
             foreach (string file in files)
@@ -49,9 +52,9 @@ public class Worker : BackgroundService
             }
 
 
-            PowerShellClient powerShellClient = new();
+            // PowerShellClient powerShellClient = new();
             // var path = powerShellClient.RunScript(_options.path)
-            var output = await powerShellClient.RunScript(
+            var output = await _powerShellClient.RunScript(
                 ScriptParser.GetScriptFromPath(
                     MockData.ScriptPath));
 
