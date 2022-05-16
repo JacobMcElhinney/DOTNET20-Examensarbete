@@ -9,6 +9,7 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
+    
 
     //MockData
     private int logEntryCount { get; set; }
@@ -27,6 +28,12 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            /*  
+                const path = require("path");
+                const fetch = require("node-fetch");
+            */
+            
+
             PowerShellClient powerShellClient = new();
             var output = await powerShellClient.RunScript(
                 ScriptParser.GetScriptFromPath(
@@ -59,3 +66,81 @@ public class Worker : BackgroundService
         return base.StopAsync(cancellationToken);
     }
 }
+
+
+/* STEPS FROM worker.ts TO REPLICATE IN THIS FILE
+
+import * as dotenv from "dotenv";
+import {
+  ProcessStep,
+  ProcessStepStatus,
+} from "../../lib/clients/mongoose/model/Process";
+import getNextSteps from "./client/getNextSteps";
+import setStepStatus from "./client/setStepStatus";
+import clone from "../../lib/clients/git/clone";
+import fs from "promise-fs";
+import postLog from "./client/postLog";
+import { NextStep } from "../../lib/types/NextStep";
+import { LogSeverity, Log } from "../../lib/types/Log";
+
+//Q&A Declares and initialises path variable with absolute path to current file?
+const path = require("path");
+const fetch = require("node-fetch");
+
+//! this is achieved in the configure services method in Program.cs
+const env = process.env.ENV || "local"; 
+dotenv.config({ path: `config/${env}.env` });
+
+const log = (log : Log) => {
+  try {
+  postLog(log);
+} catch (e) {
+  console.log('Could not connect to log api ' + e.toString());
+}
+}
+
+const runCycle = async () => {
+  let steps = [];
+  try {
+    steps = await getNextSteps();
+  } catch (e) {
+    console.log("Could not connect to flow api to retrieve upcoming steps");
+  }
+
+  log({ message: `${steps.length} steps found. ${steps.length > 0 ? `Starting to execute!` : "" }`,severity: LogSeverity.Information });
+
+  steps.forEach(async (step: NextStep) => {
+    //TODO: Check for correct version / git hash
+    const script = await fs.readFile(path.join("./repo", step.path));
+    log({ processId: step.processId, processStep: step.stepIndex, message: "Script is about to start", severity: LogSeverity.Information });
+    const runFunction = new Function("smash", "fetch", script);
+    const smash = {
+      params: step.parameters,
+      complete: () => {
+        log({ processId: step.processId, processStep: step.stepIndex, message: "Step completed", severity: LogSeverity.Information });
+        setStepStatus(
+          step.processId,
+          step.stepIndex,
+          ProcessStepStatus.Completed
+        );
+      },
+      error: (error) => {
+        log({ processId: step.processId, processStep: step.stepIndex, message: error.toString(), severity: LogSeverity.Error });
+        setStepStatus(step.processId, step.stepIndex, ProcessStepStatus.Error);
+      },
+      log: (message: string) => log({ processId: step.processId, processStep: step.stepIndex, message, severity: LogSeverity.Information })
+    };
+    setStepStatus(step.processId, step.stepIndex, ProcessStepStatus.Started);
+    try {
+      runFunction(smash, fetch);
+    } catch (e) {
+      smash.error(e.toString());
+    }
+  });
+};
+
+clone(process.env.GIT_URL, "./repo").then(() => {
+  setInterval(runCycle, Number(process.env.CYCLE_INTERVAL));
+});
+
+*/
