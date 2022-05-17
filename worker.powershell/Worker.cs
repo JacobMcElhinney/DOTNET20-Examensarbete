@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
 using worker.powershell.src.Utilities;
+using System.ComponentModel; //For enum attributes
 
 namespace worker.powershell;
 
@@ -31,11 +32,25 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            /*  
-                const path = require("path");
-                const fetch = require("node-fetch");
-            */
-            
+
+            //Mock Log
+            Log log = new()
+            {
+                Message = "test",
+                Serverity = Log.LogSeverity.Error.ToString()
+            };
+
+            try
+            {
+              
+            }
+            catch (Exception e)
+            {
+
+            }
+
+
+
 
             var files = Directory.GetFiles(".");
             foreach (string file in files)
@@ -71,7 +86,7 @@ public class Worker : BackgroundService
             }
 
 
-            await Task.Delay(3000, stoppingToken); //! defaut value: 1000ms
+            await Task.Delay(_options.CycleInterval, stoppingToken); //! defaut value: 1000ms
         }
     }
 
