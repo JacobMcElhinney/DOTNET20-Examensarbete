@@ -1,5 +1,6 @@
 using System.Management.Automation;
 using Microsoft.Extensions.Options;
+using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
 using worker.powershell.src.Utilities;
 
@@ -9,19 +10,19 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
-    private readonly PowerShellClient _powerShellClient;
+    private readonly IPowerShellService _powerShellService;
 
-    private string EnvironmentVariables { get; set; }
+    private string? EnvironmentVariables { get; set; }
     //MockData
     private int logEntryCount { get; set; }
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, PowerShellClient powerShellClient)
+    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService)
     {
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
-        _powerShellClient = powerShellClient;
+        _powerShellService = powerShellService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,7 +35,7 @@ public class Worker : BackgroundService
                 const path = require("path");
                 const fetch = require("node-fetch");
             */
-
+            
 
             var files = Directory.GetFiles(".");
             foreach (string file in files)
@@ -52,9 +53,12 @@ public class Worker : BackgroundService
             }
 
 
+
+
+
             // PowerShellClient powerShellClient = new();
             // var path = powerShellClient.RunScript(_options.path)
-            var output = await _powerShellClient.RunScript(
+            PSDataCollection<PSObject> output = await _powerShellService.RunScript(
                 ScriptParser.GetScriptFromPath(
                     MockData.ScriptPath));
 
@@ -62,7 +66,7 @@ public class Worker : BackgroundService
             {
                 foreach (PSObject item in output)
                 {
-                    System.Console.WriteLine("PowerShellClient: " + item.BaseObject.ToString());
+                    System.Console.WriteLine("NEW PowerShellService: " + item.BaseObject.ToString());
                 }
             }
 

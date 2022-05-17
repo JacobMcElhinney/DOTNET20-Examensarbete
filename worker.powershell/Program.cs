@@ -21,7 +21,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         }).SetHandlerLifetime(TimeSpan.FromMinutes(2));// create a standard HttpClient for each service and register services as transient so they can be injected and consumed directly without any need for additional registrations.
 
-        services.AddTransient<PowerShellClient>(); //! Reserach best lifecycle policy...
+        services.AddTransient<IPowerShellService, PowerShellService>();
 
     }).Build();
 
