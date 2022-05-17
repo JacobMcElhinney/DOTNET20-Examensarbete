@@ -21,6 +21,13 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         }).SetHandlerLifetime(TimeSpan.FromMinutes(2));// create a standard HttpClient for each service and register services as transient so they can be injected and consumed directly without any need for additional registrations.
 
+          services.AddHttpClient<IProcessService<ProcessStep>, ProcessService>(client => //Update to new classes...
+        {
+            //Depending on the services I register I will set the base address to match the corresponding external service/API
+            client.BaseAddress = new Uri(configurationRoot["WorkerOptions:GitUrl"]); //Since Process Step relies on Flow api.
+
+        }).SetHandlerLifetime(TimeSpan.FromMinutes(2));// create a standard HttpClient for each service and register services as transient so they can be injected and consumed directly without any need for additional registrations.
+
         services.AddTransient<IPowerShellService, PowerShellService>();
 
     }).Build();

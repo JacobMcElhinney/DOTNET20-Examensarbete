@@ -16,10 +16,11 @@ namespace worker.powershell.src.Models
 
 
         public string? Logging { get; set; }
-        public string? LogApiUrl { get; set; }
-        public string? FlowApiUrl { get; set; }
+        public string? LogApiBaseUrl { get; set; }
+        public string? FlowApiBaseUrl { get; set; }
+        public string? GitUrl { get; set; }
         public string? AgentName { get; set; }
-        public int? CycleInterval { get; set; }
+        public int CycleInterval { get; set; }
 
         
 

@@ -1,15 +1,15 @@
-namespace worker.powershell.src.Services
-{
-    public class LogService
-    {
+// namespace worker.powershell.src.Services
+// {
+//     public class LogService
+//     {
         
-    }
-}
+//     }
+// }
 
 
 
 
-//
+
 
 /* CONVERT TO C#
 const fetch = require("node-fetch");
