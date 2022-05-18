@@ -13,7 +13,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<Worker>(); //Add worker service to the container.
 
-        //Register http client services 
+        //Register http client services ...//! we will use the factory pattern and get a new named client each time,but reuse the existing client handlers.. e.g. var httpClient = HttpClientFactory.CreateClient("FlowApiClient"); here HttpClientFactory is the name of the property that stores the ctor injected httpClientFactory dependency
         services.AddHttpClient<IProcessService<ProcessStep>, ProcessService>(name: "FlowApiClient", client =>
         {
             //Depending on the services I register I will set the base address to match the corresponding external service/API
