@@ -1,6 +1,6 @@
 namespace worker.powershell.src.Interfaces
 {
-    public interface IProcessService<T>
+    public interface IProcessStepService<T>
     {
         //! Refactor!
         Task<T> GetPendingSteps(); //! GetProceedingSteps, GetAllSteps, GetRemainingSteps, GetPendingSteps?

@@ -12,6 +12,7 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
     private readonly IPowerShellService _powerShellService;
+    private readonly IProcessStepService<ProcessStep> _processStepsService;
 
     private string? EnvironmentVariables { get; set; }
     //MockData
@@ -19,11 +20,12 @@ public class Worker : BackgroundService
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService)
+    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IProcessStepService<ProcessStep> processStepService)
     {
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
         _powerShellService = powerShellService;
+        _processStepsService = processStepService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,6 +34,15 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            try
+            {
+                var steps = await _processStepsService.GetPendingSteps();
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("Null reference exception due to empty return statement...: " + e);
+            }
+
 
             //Mock Log
             Log log = new()
@@ -42,7 +53,7 @@ public class Worker : BackgroundService
 
             try
             {
-              
+
             }
             catch (Exception e)
             {
