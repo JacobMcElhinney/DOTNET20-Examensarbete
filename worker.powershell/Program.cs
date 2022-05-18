@@ -2,40 +2,20 @@ using worker.powershell;
 using worker.powershell.src.Models;
 using worker.powershell.src.Services;
 using worker.powershell.src.Interfaces;
+using worker.powershell.src.Extensions;
 
 //Add configuration capabilitie
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
-        IConfiguration configurationRoot = context.Configuration; //Provide access to appsettings via merged configuration
+        //Provide access to root node (appsettings.<Environment>.json) and merge application configuration with IHost configuration.
+        IConfiguration configurationRoot = context.Configuration;
 
         services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
 
         services.AddHostedService<Worker>(); //Add worker service to the container.
 
-        //Register http client services ...//! we will use the factory pattern and get a new named client each time,but reuse the existing client handlers.. e.g. var httpClient = HttpClientFactory.CreateClient("FlowApiClient"); here HttpClientFactory is the name of the property that stores the ctor injected httpClientFactory dependency
-        services.AddHttpClient<IProcessService<ProcessStep>, ProcessService>(name: "FlowApiClient", client =>
-        {
-            //Depending on the services I register I will set the base address to match the corresponding external service/API
-            client.BaseAddress = new Uri(configurationRoot["WorkerOptions:FlowApiUrl"]); //Since Process Step relies on Flow api.
-            client.DefaultRequestHeaders.Add(
-                name: "User-Agent",
-                value: (configurationRoot["WorkerOptions:Name"] + "/" + configurationRoot["WorkerOptions"] + "/FlowApiClient"));
-
-        }).SetHandlerLifetime(TimeSpan.FromMinutes(2));// create a standard HttpClient for each service and register services as transient so they can be injected and consumed directly without any need for additional registrations.
-
-        services.AddHttpClient<IProcessService<ProcessStep>, ProcessService>(name: "GitHubClient", configureClient: client => //Update to new classes...
-        {
-
-            //Depending on the services I register I will set the base address to match the corresponding external service/API
-            client.BaseAddress = new Uri(configurationRoot["WorkerOptions:GitUrl"]); //Since Process Step relies on Flow api.
-            client.DefaultRequestHeaders.Add(name: "Accept", value: "");
-
-            //Use HTTP Standard header: Example: User-Agent: CERN-LineMode/2.15 libwww/2.17b3
-            client.DefaultRequestHeaders.Add(
-                name: "User-Agent",
-                value: (configurationRoot["WorkerOptions:Name"] + "/" + configurationRoot["WorkerOptions"] + "/GitHubClient"));
-        }).SetHandlerLifetime(TimeSpan.FromMinutes(2));// create a standard HttpClient for each service and register services as transient so they can be injected and consumed directly without any need for additional registrations.
+        services.RegisterHttpClients(configurationRoot);
 
         services.AddTransient<IPowerShellService, PowerShellService>();
 
