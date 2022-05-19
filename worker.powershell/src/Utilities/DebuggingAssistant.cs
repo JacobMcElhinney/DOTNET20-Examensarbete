@@ -1,5 +1,8 @@
 namespace worker.powershell.src.Utilities
 {
+    ///<Summary>
+    /// Enables colour coded terminal output to help visualise the control flow of asynchronous operations during runtime execution.
+    ///</Summary>
     public static class DebuggingAssistant
     {
 
