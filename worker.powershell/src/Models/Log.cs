@@ -10,8 +10,8 @@ namespace worker.powershell.src.Models
         public string? ProcessId { get; set; }
         public int? ProcessStep { get; set; }
         public string? User { get; set; }
-        public string Message { get; set; }
-        public string Serverity { get; set; }
+        public string? Message { get; set; } //! Make non-nullanne
+        public string? Serverity { get; set; } //! Make non-nullanne
         LogSeverity ILog<LogSeverity>.LogSeverity { get; set; }
         
 

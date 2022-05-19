@@ -16,7 +16,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>(); //Add worker service to the container.
 
         services.RegisterHttpClients(configurationRoot);
+         
         services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
+
+        services.AddTransient<ILogService<Log>, LogService>();
 
         services.AddTransient<IPowerShellService, PowerShellService>();
 

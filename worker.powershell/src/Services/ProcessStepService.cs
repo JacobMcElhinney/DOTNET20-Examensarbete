@@ -16,48 +16,35 @@ namespace worker.powershell.src.Services
         }
 
         //! worker.javascript\src\client\getNextSteps.ts
-        public Task<ProcessStep> GetPendingSteps() //!Borde return type vara process? returnerar proces.steps?
+        public async Task<ProcessStep> GetPendingSteps() //!Borde return type vara process? returnerar proces.steps?
         {
             //! Do I really need a using statement? I think .Net will dispose of the instance since it manages all dependencies..
             using (HttpClient flowApiClient = _httpClientFactory.CreateClient("FlowApiClient"))
             {
-                var fake = new ProcessStep(){Agent = "test", Language="test", Path="test"};
+                var fake = new ProcessStep() { Agent = "test", Language = "test", Path = "test" };//! REMOVE!
                 try
                 {
                     var endpoint = flowApiClient.BaseAddress;
                     var result = flowApiClient.GetAsync(endpoint).Result; //!Return only the result
-                    var json = result.Content.ReadAsStringAsync().Result;
-                }
-                catch(Exception e)
-                {
-                    System.Console.WriteLine("Failed to retrieve pending process steps: " + e.Message);
-                }
-                finally
-                {
-                    
-                    System.Console.WriteLine("so far so good...");
-              
+                    var json = result.Content.ReadAsStringAsync().Result; //var processSteps = JsonConvert.DeserializeObject<ProcessStep>(result);
 
+                    //var responseString = await _httpClient.GetStringAsync("test");
+                    //     var processSteps = JsonConvert.DeserializeObject<ProcessStep>(responseString);
+                    //     return processSteps;
                 }
-                      return null;
+                catch (Exception e)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    System.Console.WriteLine("EXCEPTION: " + e.Message);
+                }
+    
+
+                //! Refactor once you have the flow api up and running
+                Task<ProcessStep> myResult = Task.FromResult(fake);
+                return await myResult;
             }
 
 
-
-            // var uri = _remoteServiceBaseUrl + "other dynamic data, see javascript.worker";
-            // try  
-            // {
-            //     //! Will the api return a json object or json stringified?
-            //     var responseString = await _httpClient.GetStringAsync("test");
-            //     var processSteps = JsonConvert.DeserializeObject<ProcessStep>(responseString);
-            //     return processSteps;
-
-            // }
-            // catch(Exception e)
-            // {
-            //     System.Console.WriteLine( e.Message);
-
-            // }
         }
 
         public Task<ProcessStep> SetStepStatus()

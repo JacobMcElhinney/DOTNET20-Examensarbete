@@ -13,6 +13,7 @@ public class Worker : BackgroundService
     private readonly WorkerOptions _options;
     private readonly IPowerShellService _powerShellService;
     private readonly IProcessStepService<ProcessStep> _processStepsService;
+    private readonly ILogService<Log> _LogService;
 
     private string? EnvironmentVariables { get; set; }
     //MockData
@@ -20,12 +21,13 @@ public class Worker : BackgroundService
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IProcessStepService<ProcessStep> processStepService)
+    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IProcessStepService<ProcessStep> processStepService, ILogService<Log> logService)
     {
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
         _powerShellService = powerShellService;
         _processStepsService = processStepService;
+        _LogService = logService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,30 +36,31 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+
+            //!TEST: call ProcessStepService
             try
             {
+              Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.WriteLine("DEBUG: Attempting to call Flow API...");
                 var steps = await _processStepsService.GetPendingSteps();
             }
             catch (Exception e)
             {
-                System.Console.WriteLine("Null reference exception due to empty return statement...: " + e);
+                Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("EXCEPTION: " + e.Message);
             }
 
-
-            //Mock Log
-            Log log = new()
-            {
-                Message = "test",
-                Serverity = Log.LogSeverity.Error.ToString()
-            };
-
+            //!TEST: call LogService
             try
             {
-
+                Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.WriteLine("DEBUG: Attempting to call Log API...");
+                await _LogService.postLog(null);
             }
             catch (Exception e)
-            {
-
+            { 
+                Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("EXCEPTION: " + e.Message);
             }
 
 
@@ -74,7 +77,8 @@ public class Worker : BackgroundService
             if (EnvironmentVariables == null)
             {
                 string currentDirectory = Directory.GetCurrentDirectory();
-                System.Console.WriteLine(currentDirectory + _options.Path);
+                Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.WriteLine("DEBUG: " + currentDirectory + _options.Path);
                 EnvironmentVariables = currentDirectory + _options.Path;
             }
 
@@ -92,7 +96,8 @@ public class Worker : BackgroundService
             {
                 foreach (PSObject item in output)
                 {
-                    System.Console.WriteLine("NEW PowerShellService: " + item.BaseObject.ToString());
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    System.Console.WriteLine("DEBUG: PowerShellService: " + item.BaseObject.ToString());
                 }
             }
 
