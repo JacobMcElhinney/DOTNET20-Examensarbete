@@ -23,10 +23,9 @@ namespace worker.powershell.src.Services
                 {
                     HttpClient logApiClient = _httpClientFactory.CreateClient("LogApiClient");
                     string flowApiUrl = logApiClient.BaseAddress.ToString();
-
                     var fakeLog = new Log();//! REmove fake log
-                    var response = await logApiClient.PostAsJsonAsync(flowApiUrl, fakeLog ); //! Expect exception to be trown when server is not running: no connection could be made...
-                    var result = response.IsSuccessStatusCode? "successful":"failed";
+                    var response = await logApiClient.PostAsJsonAsync(flowApiUrl, fakeLog); //! Expect exception to be trown when server is not running: no connection could be made...
+                    var result = response.IsSuccessStatusCode ? "successful" : "failed";
                     Console.ForegroundColor = ConsoleColor.Green;
                     System.Console.WriteLine("Log operation was " + result);
                 });

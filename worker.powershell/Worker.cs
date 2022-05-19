@@ -17,7 +17,7 @@ public class Worker : BackgroundService
 
     private string? EnvironmentVariables { get; set; }
     //MockData
-    private int logEntryCount { get; set; }
+
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
@@ -32,7 +32,6 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Worker starting...");
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -40,27 +39,26 @@ public class Worker : BackgroundService
             //!TEST: call ProcessStepService
             try
             {
-              Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.WriteLine("DEBUG: Attempting to call Flow API...");
+   
+              DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Flow API..." );
+
                 var steps = await _processStepsService.GetPendingSteps();
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("EXCEPTION: " + e.Message);
+              DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error,  e.Message);
             }
 
             //!TEST: call LogService
             try
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.WriteLine("DEBUG: Attempting to call Log API...");
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Log API..." );
                 await _LogService.postLog(null);
             }
             catch (Exception e)
             { 
-                Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("EXCEPTION: " + e.Message);
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message );
+
             }
 
 
@@ -74,19 +72,14 @@ public class Worker : BackgroundService
 
             }
 
+            //! TEST: refactor this code, create method for navigating to script directory/env file etc etc..
             if (EnvironmentVariables == null)
             {
                 string currentDirectory = Directory.GetCurrentDirectory();
-                Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.WriteLine("DEBUG: " + currentDirectory + _options.Path);
-                EnvironmentVariables = currentDirectory + _options.Path;
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Create env file here: {currentDirectory}{_options.Path}"); 
             }
 
 
-
-
-
-            // PowerShellClient powerShellClient = new();
             // var path = powerShellClient.RunScript(_options.path)
             PSDataCollection<PSObject> output = await _powerShellService.RunScript(
                 ScriptParser.GetScriptFromPath(
@@ -96,8 +89,7 @@ public class Worker : BackgroundService
             {
                 foreach (PSObject item in output)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    System.Console.WriteLine("DEBUG: PowerShellService: " + item.BaseObject.ToString());
+                    DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
                 }
             }
 
@@ -109,7 +101,7 @@ public class Worker : BackgroundService
     //Called when the worker is started. Allows for asynchronous initialization calls.
     public override Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_options.Logging != "disabled") _logger.LogInformation("Worker starting...");
+        _logger.LogInformation("Worker starting...");
         return base.StartAsync(cancellationToken);
     }
 
