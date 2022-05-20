@@ -25,8 +25,6 @@ IHost host = Host.CreateDefaultBuilder(args)
 
     }).Build();
 
-
-
 //.NET will start the worker service.
 await host.RunAsync();
 
@@ -37,6 +35,6 @@ await host.RunAsync();
     -   Consider which variables to store in appsettings and which to store in launchSettings.json 
         or .env file. see utility method DotEnv.... application secrets must be stored in a secure manner.
     -   Add all the necessary classes to DI container at some point.
-    -   .Net Options Pattern provides a way for application to read value from appsettings.json OnChange.
+    -   .Net Options Pattern provides a way for application to read value from appsettings.json OnChange without restarting.
         Is that something we want?
 */

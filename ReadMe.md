@@ -123,5 +123,23 @@ public class ProcessOrder : IInvocable
     }
 }
 
+```
+
+
+```CSharp
+
+//Two how to get current directory or path realtive to where this code is being executed from.
+            var files = Directory.GetFiles(".");
+            foreach (string file in files)
+            {
+                System.Console.WriteLine("worker directory: " + Path.GetRelativePath(".",file));
+            }
+
+            //! TEST: refactor this code, create method for navigating to script directory/env file etc etc..
+            if (EnvironmentVariables == null)
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Create env file here: {currentDirectory}{_options.Path}");
+            }
 
 ```
