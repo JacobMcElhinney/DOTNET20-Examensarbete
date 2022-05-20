@@ -35,63 +35,49 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-
             //!TEST: call ProcessStepService
             try
             {
-   
-              DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Flow API..." );
-
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Flow API...");
                 var steps = await _processStepsService.GetPendingSteps();
             }
             catch (Exception e)
             {
-              DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error,  e.Message);
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message);
             }
 
             //!TEST: call LogService
             try
             {
-                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Log API..." );
-                await _LogService.postLog(null);
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Attempting to call Log API...");
+                await _LogService.postLog(null);//! pass collection of steps returned from _processStepsService.GetPending() steps
             }
             catch (Exception e)
-            { 
-                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message );
-
+            {
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message);
             }
 
-
-
-
-            var files = Directory.GetFiles(".");
-            foreach (string file in files)
+            try
             {
+                // var path = powerShellClient.RunScript(_options.path)
+                PSDataCollection<PSObject> output = await _powerShellService.RunScript(
+                    ScriptParser.GetScriptFromPath(
+                        MockData.ScriptPath));
 
-                // System.Console.WriteLine("worker directory: " + Path.GetRelativePath(".",file));
-
-            }
-
-            //! TEST: refactor this code, create method for navigating to script directory/env file etc etc..
-            if (EnvironmentVariables == null)
-            {
-                string currentDirectory = Directory.GetCurrentDirectory();
-                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Create env file here: {currentDirectory}{_options.Path}"); 
-            }
-
-
-            // var path = powerShellClient.RunScript(_options.path)
-            PSDataCollection<PSObject> output = await _powerShellService.RunScript(
-                ScriptParser.GetScriptFromPath(
-                    MockData.ScriptPath));
-
-            if (_options.Logging != "disabled")
-            {
-                foreach (PSObject item in output)
+                if (_options.Logging != "disabled")
                 {
-                    DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
+                    foreach (PSObject item in output)
+                    {
+                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message);
+            }
+
+
 
 
             await Task.Delay(_options.CycleInterval, stoppingToken); //! defaut value: 1000ms
