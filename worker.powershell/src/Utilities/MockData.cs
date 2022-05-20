@@ -1,3 +1,5 @@
+using worker.powershell.src.Models;
+
 namespace worker.powershell.src.Utilities
 {
     /// <summary>
@@ -11,6 +13,17 @@ namespace worker.powershell.src.Utilities
             get { return scriptPath; }
             set { scriptPath = value; }
         }
-        
+
+        public static List<ProcessStep> GenerateProcessStepsCollection()
+        {
+
+            ProcessStep fakeStep1 = new() { Agent = "Cloud", Language = "English", Parameters = null, Path = "a" };
+            ProcessStep fakeStep2 = new() { Agent = "Local", Language = "Swedish", Parameters = null, Path = "b" };
+            var processSteps = new List<ProcessStep>();
+            processSteps.Add(fakeStep1);
+            processSteps.Add(fakeStep2);
+            return processSteps;
+        }
+
     }
 }

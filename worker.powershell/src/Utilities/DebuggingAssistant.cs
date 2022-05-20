@@ -21,7 +21,7 @@ namespace worker.powershell.src.Utilities
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    System.Console.WriteLine("TEST: " + message);
+                    System.Console.WriteLine("EXEPTION: " + message);
                 break;
             }
         }
