@@ -4,6 +4,7 @@ using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
 using worker.powershell.src.Utilities;
 using System.ComponentModel; //For enum attributes
+using worker.powershell.src.Services;
 
 namespace worker.powershell;
 
@@ -14,6 +15,8 @@ public class Worker : BackgroundService
     private readonly IPowerShellService _powerShellService;
     private readonly IProcessStepService<ProcessStep> _processStepsService;
     private readonly ILogService<Log> _LogService;
+    private readonly ITestService<Log> _test; //! remove
+    private readonly Log _log;
 
     private string? EnvironmentVariables { get; set; }
     //MockData
@@ -21,20 +24,23 @@ public class Worker : BackgroundService
 
 
     //Called once when resolved from Dependency Injection container in Program.cs
-    public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IProcessStepService<ProcessStep> processStepService, ILogService<Log> logService)
+    public Worker(ITestService<Log> test,Log testlog, ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IProcessStepService<ProcessStep> processStepService, ILogService<Log> logService)
     {
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
         _powerShellService = powerShellService;
         _processStepsService = processStepService;
         _LogService = logService;
-    }
+        _test = test;
+        _log = testlog;
+    } 
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
         while (!stoppingToken.IsCancellationRequested)
         {
+          _test.PrintLog(_log);
             //!TEST: call ProcessStepService
             try
             {

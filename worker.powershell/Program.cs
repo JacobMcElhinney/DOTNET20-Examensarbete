@@ -21,7 +21,11 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddTransient<ILogService<Log>, LogService>();
 
+        services.AddTransient<Log>();
+
         services.AddTransient<IPowerShellService, PowerShellService>();
+
+        services.AddTransient<ITestService<Log>, TestService>();
 
     }).Build();
 
