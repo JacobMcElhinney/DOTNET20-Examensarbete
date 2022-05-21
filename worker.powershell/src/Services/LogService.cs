@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
+using worker.powershell.src.Utilities;
 
 namespace worker.powershell.src.Services
 {
@@ -23,21 +24,17 @@ namespace worker.powershell.src.Services
                 {
                     HttpClient logApiClient = _httpClientFactory.CreateClient("LogApiClient");
                     string flowApiUrl = logApiClient.BaseAddress.ToString();
-                    var fakeLog = new Log();//! REmove fake log
-                    var response = await logApiClient.PostAsJsonAsync(flowApiUrl, fakeLog); //! Expect exception to be trown when server is not running: no connection could be made...
+                    var response = await logApiClient.PostAsJsonAsync(flowApiUrl, MockData.GenerateLog()); //! Expect exception to be trown when server is not running: no connection could be made...
                     var result = response.IsSuccessStatusCode ? "successful" : "failed";
-                    Console.ForegroundColor = ConsoleColor.Green;
                     System.Console.WriteLine("Log operation was " + result);
                 });
 
                 var task = Task.CompletedTask;
-                Console.ForegroundColor = ConsoleColor.Green;
-                System.Console.WriteLine("DEBUG: Operation complete: " + task.IsCompleted);
+                System.Console.WriteLine("Operation complete: " + task.IsCompleted);
 
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
                 System.Console.WriteLine("EXCEPTION: " + e.Message);
             }
         }

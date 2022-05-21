@@ -25,5 +25,25 @@ namespace worker.powershell.src.Utilities
             return processSteps;
         }
 
+        public static Log GenerateLog()
+        {
+            Log fakeLog = new()
+            {
+                ProcessId = "test process",
+                ProcessStep = 1,
+                Serverity = Log.LogSeverity.Information.ToString(),
+                TimeStamp = DateTime.Now,
+                User = "test",
+                Message = "test"
+            };
+            return fakeLog;
+        }
+
+        public static ProcessStep GenerateProcessStep()
+        {
+            var fakeProcessStep = new ProcessStep() { Agent = "test", Language = "test", Path = "test" };
+            return fakeProcessStep;
+        }
+
     }
 }
