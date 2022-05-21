@@ -21,7 +21,6 @@ namespace worker.powershell.src.Services
             //! Do I really need a using statement? I think .Net will dispose of the instance since it manages all dependencies..
             using (HttpClient flowApiClient = _httpClientFactory.CreateClient("FlowApiClient"))
             {
-                var fake = new ProcessStep() { Agent = "test", Language = "test", Path = "test" };//! REMOVE!
                 try
                 {
                     var endpoint = flowApiClient.BaseAddress;
@@ -34,13 +33,12 @@ namespace worker.powershell.src.Services
                 }
                 catch (Exception e)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
                     System.Console.WriteLine("EXCEPTION: " + e.Message);
                 }
     
 
                 //! Refactor once you have the flow api up and running
-                Task<ProcessStep> myResult = Task.FromResult(fake);
+                Task<ProcessStep> myResult = Task.FromResult(MockData.GenerateProcessStep());
                 return await myResult;
             }
 
