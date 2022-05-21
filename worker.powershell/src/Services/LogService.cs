@@ -15,7 +15,7 @@ namespace worker.powershell.src.Services
 
         }
 
-        public async Task postLog(ILog<Log>? log)//! remove nullable attrinute.
+        public async Task postLog(Log log)//! remove nullable attrinute.
         {
             try
             {

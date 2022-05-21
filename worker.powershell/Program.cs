@@ -4,28 +4,26 @@ using worker.powershell.src.Services;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Extensions;
 
-//Add configuration capabilitie
+//Configure HostBuilderContext (program configuration context) and IServiceCollection (Dependency Injection Container) instances.
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         //Provide access to root node (appsettings.<Environment>.json) and merge application configuration with IHost configuration.
         IConfiguration configurationRoot = context.Configuration;
 
-        services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
-
-        services.AddHostedService<Worker>(); //Add worker service to the container.
+        //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
+        services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); 
 
         services.RegisterHttpClients(configurationRoot);
+
+        services.AddHostedService<Worker>();
          
         services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
 
         services.AddTransient<ILogService<Log>, LogService>();
 
-        services.AddTransient<Log>();
-
         services.AddTransient<IPowerShellService, PowerShellService>();
 
-        services.AddTransient<ITestService<Log>, TestService>();
 
     }).Build();
 

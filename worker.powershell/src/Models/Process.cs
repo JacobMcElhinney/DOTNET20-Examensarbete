@@ -1,13 +1,10 @@
-using worker.powershell.src.Interfaces;
-
 namespace worker.powershell.src.Models
 {
-    public class Process : IProcess<Process.Status>
+    public class Process
     {
-        public string FlowName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IList<object> Parameters { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IList<object> Steps { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        Status IProcess<Status>.Status { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FlowName { get; set; }
+        public IList<object> Parameters { get; set; }
+        public IList<object> Steps { get; set; }
 
         public enum Status
         {

@@ -1,13 +1,14 @@
 namespace worker.powershell.src.Models
 {
     /// <summary>
-    /// Option class (implementation of Options pattern in .NET), used to read related configuration values in appsettings.Environment.json 
+    /// A representation of the configuration section in appsettings. 
+    /// WorkerOptions is used to read related configuration values in appsettings.Environment.json. 
+    /// Each class member property has a binding to a configuration value with a corresponding name. 
+    /// Options Class: implementation of Options pattern in .NET (Microsoft.Extensions.Options.IOptions).
     /// </summary>
 
-    //Type representation of configuration section in appsettings
     public class WorkerOptions 
     {
-        //Each propery has a binding to a configuration value with corresponding name in e.g appsettings.Development.json or appsettings.json
         public string? Name { get; set; }
         public string? Version { get; set; }
         public string? Description { get; set; }
