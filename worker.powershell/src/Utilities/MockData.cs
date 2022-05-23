@@ -32,7 +32,7 @@ namespace worker.powershell.src.Utilities
                 ProcessId = "test process",
                 ProcessStep = 1,
                 Serverity = Log.LogSeverity.Information.ToString(),
-                TimeStamp = DateTime.Now,
+                Timestamp = DateTime.Now,
                 User = "test",
                 Message = "test"
             };
