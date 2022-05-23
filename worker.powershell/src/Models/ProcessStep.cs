@@ -15,7 +15,7 @@ namespace worker.powershell.src.Models
         public string? Path { get; set; }
         
         [JsonPropertyName("parameters")]
-        public IList<object>? Parameters { get; set; }
+        public List<object>? Parameters { get; set; }
         public enum ProcessStepStatus
         {
             Pending,

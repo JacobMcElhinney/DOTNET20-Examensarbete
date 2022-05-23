@@ -14,6 +14,7 @@ public class Worker : BackgroundService
     private readonly WorkerOptions _options;
     private readonly IPowerShellService _powerShellService;
     private readonly IProcessStepService<ProcessStep> _processStepService;
+    private int IterationCount {get;set;}
 
 
     //Called once, when resolved from Dependency Injection container in Program.cs
@@ -34,7 +35,15 @@ public class Worker : BackgroundService
 
             
             var steps = await _processStepService.GetPendingSteps();
+            
+            IterationCount++;
+            System.Console.WriteLine("Iteration:" + IterationCount);
 
+            foreach (var step in steps)
+            {
+
+                System.Console.WriteLine(step.Agent);
+            }
 
             try
             {
