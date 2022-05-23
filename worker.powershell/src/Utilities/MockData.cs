@@ -11,7 +11,9 @@ namespace worker.powershell.src.Utilities
     /// </summary>
     public static class MockData
     {
-        private static string scriptPath = @"TestScript.ps1";
+        // private static string scriptPath = @"TestScript.ps1";
+        private static string scriptPath = @".\src\Scripts\LogScript.ps1";
+
         public static string ScriptPath
         {
             get { return scriptPath; }

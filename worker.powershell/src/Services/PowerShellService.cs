@@ -13,7 +13,6 @@ namespace worker.powershell.src.Services
                 {
                     // specify the script code to run.
                     ps.AddScript(script);
-
                     // execute the script and await the result.
                     var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);
 

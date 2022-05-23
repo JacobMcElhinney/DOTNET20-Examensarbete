@@ -36,14 +36,6 @@ public class Worker : BackgroundService
             
             var steps = await _processStepService.GetPendingSteps();
             
-            IterationCount++;
-            System.Console.WriteLine("Iteration:" + IterationCount);
-
-            foreach (var step in steps)
-            {
-
-                System.Console.WriteLine(step.Agent);
-            }
 
             try
             {
