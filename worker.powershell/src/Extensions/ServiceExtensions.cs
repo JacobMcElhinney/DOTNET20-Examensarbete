@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
 using worker.powershell.src.Services;
@@ -16,6 +17,7 @@ namespace worker.powershell.src.Extensions
             {
                try{
                    client.BaseAddress = new Uri(appSettingsConfiguration["WorkerOptions:FlowApiBaseUrl"]); //Since Process Step relies on Flow api.
+                   client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); //IANA registered Discrete Type (application: generic binary data) representing a single json text stream
                }
                catch (Exception e)
                {

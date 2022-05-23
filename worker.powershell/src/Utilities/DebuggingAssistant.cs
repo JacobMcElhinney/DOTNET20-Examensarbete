@@ -18,10 +18,13 @@ namespace worker.powershell.src.Utilities
                 case MessageType.Info:
                     Console.ForegroundColor = ConsoleColor.Green;
                     System.Console.WriteLine("INFO: " + message);
+                    Console.ForegroundColor = ConsoleColor.White;
+
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    System.Console.WriteLine("EXEPTION: " + message);
+                    System.Console.WriteLine("EXCEPTION: " + message);
+                    Console.ForegroundColor = ConsoleColor.White;
                 break;
             }
         }

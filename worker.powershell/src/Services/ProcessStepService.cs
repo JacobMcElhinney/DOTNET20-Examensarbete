@@ -23,9 +23,14 @@ namespace worker.powershell.src.Services
             {
                 try
                 {
-                    var endpoint = flowApiClient.BaseAddress;
-                    var result = flowApiClient.GetAsync(endpoint).Result; //!Return only the result
-                    var json = result.Content.ReadAsStringAsync().Result; //var processSteps = JsonConvert.DeserializeObject<ProcessStep>(result);
+                    
+
+
+
+
+                    // var endpoint = flowApiClient.BaseAddress;
+                    // var result = flowApiClient.GetAsync(endpoint).Result; //!Return only the result
+                    // var json = result.Content.ReadAsStringAsync().Result; //var processSteps = JsonConvert.DeserializeObject<ProcessStep>(result);
 
                     //var responseString = await _httpClient.GetStringAsync("test");
                     //     var processSteps = JsonConvert.DeserializeObject<ProcessStep>(responseString);

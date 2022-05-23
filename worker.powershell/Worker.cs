@@ -28,7 +28,7 @@ public class Worker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-         
+          await MockData.GetReposRequest();
 
             try
             {
