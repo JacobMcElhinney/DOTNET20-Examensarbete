@@ -5,6 +5,7 @@ namespace worker.powershell.src.Utilities
     ///</Summary>
     public static class DebuggingAssistant
     {
+        public static bool? Logging { get; set; }
 
         public enum MessageType {
             Info,
@@ -13,20 +14,24 @@ namespace worker.powershell.src.Utilities
         }
         public static void LogMessage(Enum? type, string message)
         {
-            switch (type)
+            if (Logging == true)
             {
-                case MessageType.Info:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    System.Console.WriteLine("INFO: " + message);
-                    Console.ForegroundColor = ConsoleColor.White;
+                switch (type)
+                {
+                    case MessageType.Info:
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        System.Console.WriteLine("INFO: " + message);
+                        Console.ForegroundColor = ConsoleColor.White;
 
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        System.Console.WriteLine("EXCEPTION: " + message);
+                        Console.ForegroundColor = ConsoleColor.White;
                     break;
-                default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    System.Console.WriteLine("EXCEPTION: " + message);
-                    Console.ForegroundColor = ConsoleColor.White;
-                break;
+                }
             }
+                
         }
    
     }

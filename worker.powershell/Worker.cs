@@ -13,6 +13,7 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly WorkerOptions _options;
     private readonly IPowerShellService _powerShellService;
+    private readonly IProcessStepService<ProcessStep> _processStepService;
 
 
     //Called once, when resolved from Dependency Injection container in Program.cs
@@ -21,14 +22,19 @@ public class Worker : BackgroundService
         _logger = logger;
         _options = options.Value; //Appsettings.Development.json section: "WorkerOptions": 
         _powerShellService = powerShellService;
-    } 
+        _processStepService = processStepService;
+        DebuggingAssistant.Logging = _options.Logging;
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
 
         while (!stoppingToken.IsCancellationRequested)
         {
-          await MockData.GetReposRequest();
+
+            
+            var steps = await _processStepService.GetPendingSteps();
+
 
             try
             {
@@ -37,13 +43,12 @@ public class Worker : BackgroundService
                     ScriptParser.GetScriptFromPath(
                         MockData.ScriptPath));
 
-                if (_options.Logging != "disabled")
+
+                foreach (PSObject item in output)
                 {
-                    foreach (PSObject item in output)
-                    {
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
-                    }
+                    DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
                 }
+
             }
             catch (Exception e)
             {
