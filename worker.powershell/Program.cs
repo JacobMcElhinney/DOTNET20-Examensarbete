@@ -17,6 +17,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.RegisterHttpClients(configurationRoot);
 
         services.AddHostedService<Worker>();
+
+        services.AddTransient<IJobService<WorkerJob>, JobService>();
          
         services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
 

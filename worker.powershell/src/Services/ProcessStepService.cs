@@ -18,7 +18,7 @@ namespace worker.powershell.src.Services
         }
 
         //! worker.javascript\src\client\getNextSteps.ts
-        public async Task<List<ProcessStep>> GetPendingSteps() //!Borde return type vara process? returnerar proces.steps?
+        public async Task<List<ProcessStep>> GetPendingSteps() //!Borde return type vara process? returnerar proces.steps? renanme, follow convention: GetPendingStepsAsync
         {
             //! Do I really need a using statement? I think .Net will dispose of the instance since it manages all dependencies..
             using (HttpClient flowApiClient = _httpClientFactory.CreateClient("FlowApiClient"))
@@ -26,10 +26,10 @@ namespace worker.powershell.src.Services
                 try
                 {
                     string url = flowApiClient.BaseAddress.ToString();
-                    string agent = _configuration["WorkerOptions:AgentName"];
+                    string agentName = _configuration["WorkerOptions:AgentName"];
                     
                     //Call GetStreamAsync and return and return response body of type Task<Stream>.
-                    var streamTask = flowApiClient.GetStreamAsync(requestUri: $"{url}agent/{agent}/next");
+                    var streamTask = flowApiClient.GetStreamAsync(requestUri: $"{url}agent/{agentName}/next");
 
                     //Return a collection of ProcessSteps from streamTask where Json key name matches [JsonPropertyName("<propertyName>")] attribute in ProcessStep class.
                     var processSteps = await JsonSerializer.DeserializeAsync<List<ProcessStep>>(await streamTask);
