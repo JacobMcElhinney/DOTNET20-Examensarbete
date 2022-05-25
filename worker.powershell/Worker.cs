@@ -32,39 +32,59 @@ public class Worker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var jobs = await _jobService.GetJobsAsync();
-
-            foreach (var job in jobs)
+            if (jobs is null)
             {
-                if (job.Completed is null) //Change to is null
+                DebuggingAssistant.LogMessage(
+                DebuggingAssistant.MessageType.Error,
+                "Worker JobService failed. Press [ctrl + c] to exit application...");
+                break;
+            }
+
+            var pendingJobs = jobs.Where<WorkerJob>(j => j.Completed == null);
+
+            foreach (var job in pendingJobs)
+            {
+
+                if (job.Status is not (Status)3 && job.Completed == null) //Complete
                 {
+                    IterationCount++;
+
                     try
                     {
-                        job.Status = (Status)1; //
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job Status: {job.Status.ToString()}");
+                        job.Status = (Status)1; //Started
+                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
 
                         PSDataCollection<PSObject> output = await _powerShellService.RunScript(
                             ScriptParser.GetScriptFromPath(job.Path));
-
                         foreach (PSObject item in output)
                         {
                             DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
                         }
 
-                        job.Status = (Status)3;
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job Status: {job.Status.ToString()}");
+                        var logfile = File.ReadAllText(job.Path);
+                        if (logfile != null)
+                        {
+                            job.Status = (Status)3; //Completed
+                            DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
+                        }
+                        else
+                        {
+                            job.Status = (Status)2; //Cancelled
+                        }
+
+                        _jobService.PutJobAsync(job);
+
                     }
                     catch (Exception e)
                     {
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message);
+                        job.Status = (Status)2; //Cancelled
+                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
                     }
-
-
-
-                    //!Maybe return something from script to validate that script executed successfully
-                    //await _jobservice.PutJobAsync() update job status to Completed. !LATER move awit to other place or use Task.Run()?
                 }
-
             }
+
+
+            DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Looking for work...");
 
             await Task.Delay(_options.CycleInterval, stoppingToken); //! defaut value: 1000ms
         }

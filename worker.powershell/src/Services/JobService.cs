@@ -1,40 +1,62 @@
+using System.Text;
 using System.Text.Json;
 using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace worker.powershell.src.Services
 {
     public class JobService : IJobService<WorkerJob>
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly string _namedClient;
 
         public JobService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
+            _namedClient = "JobApiClient";
         }
 
         public async Task<List<WorkerJob>> GetJobsAsync()
         {
-           using( HttpClient jobApiClient = _httpClientFactory.CreateClient("JobApiClient"))
-           {
-               try
-               {
-                   //! compare runtime value with: https://localhost:7065/api/Job
-                   string uri = jobApiClient.BaseAddress.ToString() + "api/Job";
-                   
-                   var streamTask = jobApiClient.GetStreamAsync(requestUri: uri);
+            using (HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient))
+            {
+                try
+                {
+                    //! compare runtime value with: https://localhost:7065/api/Job
+                    string uri = jobApiClient.BaseAddress.ToString() + "api/Job";
 
-                   var jobs = await JsonSerializer.DeserializeAsync<List<WorkerJob>>(utf8Json: await streamTask);
+                    var streamTask = jobApiClient.GetStreamAsync(requestUri: uri);
 
-                   return jobs;
+                    var jobs = await JsonSerializer.DeserializeAsync<List<WorkerJob>>(utf8Json: await streamTask);
 
-               }
-               catch (Exception e)
-               {
-                   System.Console.WriteLine(nameof(JobService) + e.Message + ". Make sure API is running");
-                   throw;
-               }
-           }
+                    return jobs;
+
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(nameof(JobService) + " " + e.Message + ". Make sure API is running");
+                    return null;
+                }
+            }
+        }
+
+        public async Task PutJobAsync(WorkerJob job)
+        {
+            if (job.Status.ToString() == "Completed")
+                job.Completed = DateTime.Now;
+
+            using (HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient))
+            {
+
+                var jsonJob = new StringContent(
+                    JsonSerializer.Serialize(job),
+                    Encoding.UTF8,
+                    Application.Json);
+
+                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
+                httpResponseMessage.EnsureSuccessStatusCode();
+            }
         }
 
 

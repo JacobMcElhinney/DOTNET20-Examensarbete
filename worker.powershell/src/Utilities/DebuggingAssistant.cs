@@ -26,12 +26,11 @@ namespace worker.powershell.src.Utilities
                         break;
                     default:
                         Console.ForegroundColor = ConsoleColor.Red;
-                        System.Console.WriteLine("EXCEPTION: " + message);
+                        System.Console.WriteLine(" [!]: " + message);
                         Console.ForegroundColor = ConsoleColor.White;
                     break;
                 }
             }
-                
         }
    
     }
