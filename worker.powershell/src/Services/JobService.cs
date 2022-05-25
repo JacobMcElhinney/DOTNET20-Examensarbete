@@ -31,7 +31,7 @@ namespace worker.powershell.src.Services
                }
                catch (Exception e)
                {
-                   System.Console.WriteLine(nameof(JobService) + e.Message);
+                   System.Console.WriteLine(nameof(JobService) + e.Message + ". Make sure API is running");
                    throw;
                }
            }

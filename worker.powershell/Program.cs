@@ -20,7 +20,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddTransient<IJobService<WorkerJob>, JobService>();
          
-        services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
+        // services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
 
         services.AddTransient<ILogService<Log>, LogService>();
 
