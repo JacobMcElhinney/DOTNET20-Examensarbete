@@ -143,3 +143,67 @@ public class ProcessOrder : IInvocable
             }
 
 ```
+
+
+```CSharp
+
+//DIFFERENT APPROACH TO POWERSHELL CLIENT... Execution Policy GPO conflict?
+/*
+     [!]: File C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\src\Scripts\LogEntryScript.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170. Job status: Cancelled
+*/
+
+//Worker.cs
+ var output = _powerShellService.RunScript(job.Path);
+                        
+                        foreach (var item in output)
+                        {
+                            Terminal.LogMessage(Terminal.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
+                        }; 
+
+//Needs refactoring this seems to be working but PowershellService is registered as transient and I want have i registered as a singleton and open/close runspace in the run script method instead.
+
+//PowerShellService.cs
+using System.Collections.ObjectModel;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
+using worker.powershell.src.Interfaces;
+
+namespace worker.powershell.src.Services
+{
+    public class PowerShellService : IPowerShellService
+    {
+        private Runspace _runspace;
+        private PowerShell _ps;
+
+        public PowerShellService()
+        {
+            _runspace = RunspaceFactory.CreateRunspace();
+            _runspace.Open();
+            _ps = PowerShell.Create(_runspace);
+        }
+        public Collection<PSObject> RunScript(string scriptPath)
+        {
+            Collection<PSObject> output;
+            using (var pipeline = _runspace.CreatePipeline())
+            {
+                System.Console.WriteLine(scriptPath + "-------------------------------------");
+               Command runScript = new Command(scriptPath);
+               pipeline.Command.Add()
+               pipeline.Commands.Add(runScript);
+               var pipelineObjects = pipeline.Invoke();
+               output = pipelineObjects;
+            }
+            return output;
+        }
+    }
+}
+
+/*
+OUTPUT
+task: Job 9 Status: Started
+.\src\Scripts\LogEntryScript.ps1-------------------------------------
+ [!]: File C:\Custom\Repositories\Sprinto\DOTNET20-Examensarbete\worker.powershell\src\Scripts\LogEntryScript.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170. Job status: Cancelled
+*/
+
+```
+
