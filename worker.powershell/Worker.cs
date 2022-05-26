@@ -3,7 +3,10 @@ using worker.powershell.src.Interfaces;
 using worker.powershell.src.Models;
 using worker.powershell.src.Utilities;
 using System.Management.Automation;
+using System.Diagnostics;
+
 namespace worker.powershell;
+
 
 public class Worker : BackgroundService
 {
@@ -11,8 +14,11 @@ public class Worker : BackgroundService
     private readonly WorkerOptions _options;
     private readonly IPowerShellService _powerShellService;
     private readonly IJobService<WorkerJob> _jobService;
+
     // private readonly IProcessStepService<ProcessStep> _processStepService;
     private int IterationCount { get; set; }
+
+
 
 
     //Called once, when resolved from Dependency Injection container in Program.cs
@@ -28,6 +34,9 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Worker running...");
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -43,50 +52,65 @@ public class Worker : BackgroundService
 
             var pendingJobs = jobs.Where<WorkerJob>(j => j.Completed == null);
 
-            foreach (var job in pendingJobs)
-            {
-
-                if (job.Status is not (Status)3 && job.Completed == null) //Complete
+            await Task.Run(async
+                () =>
                 {
-                    IterationCount++;
-
-                    try
+                    foreach (var job in pendingJobs)
                     {
-                        job.Status = (Status)1; //Started
-                        Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
 
-                        PSDataCollection<PSObject> output = await _powerShellService.RunScript(
-                            ScriptParser.GetScriptFromPath(job.Path));
-                        foreach (PSObject item in output)
+                        if (job.Status is not (Status)3 && job.Completed == null) //Complete
                         {
-                            Terminal.LogMessage(Terminal.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
-                        }
+                            IterationCount++;
 
-                        var logfile = File.ReadAllText(job.Path);
-                        if (logfile != null)
-                        {
-                            job.Status = (Status)3; //Completed
-                            Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
-                        }
-                        else
-                        {
-                            job.Status = (Status)2; //Cancelled
-                        }
+                            try
+                            {
+                                job.Status = (Status)1; //Started
+                                Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
 
-                        _jobService.PutJobAsync(job);
+                                PSDataCollection<PSObject> output = await _powerShellService.RunScript(
+                                    ScriptParser.GetScriptFromPath(job.Path));
+                                foreach (PSObject item in output)
+                                {
+                                    Terminal.LogMessage(Terminal.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
+                                }
 
-                    }
-                    catch (Exception e)
-                    {
-                        job.Status = (Status)2; //Cancelled
-                        Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
+                                var logfile = File.ReadAllText(job.Path);
+                                if (logfile != null)
+                                {
+                                    job.Status = (Status)3; //Completed
+                                    Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
+                                }
+                                else
+                                {
+                                    job.Status = (Status)2; //Cancelled
+                                }
+
+                                await _jobService.PutJobAsync(job);
+
+                            }
+                            catch (Exception e)
+                            {
+                                job.Status = (Status)2; //Cancelled
+                                Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
+                            }
+                        }
                     }
                 }
-            }
+            );
 
-            if(IterationCount != 0) {IterationCount = 0; _logger.LogInformation("Jobs completed...");}
+            await Task.WhenAll();
+
+
+            if (IterationCount != 0) 
+            { 
+                IterationCount = 0; 
+                _logger.LogInformation("Jobs completed...");
+                stopwatch.Stop();
+                System.Console.WriteLine(stopwatch.ElapsedMilliseconds.ToString());   
+            }
             Terminal.LogMessage(Terminal.MessageType.Info, "Looking for work...");
 
+            
             await Task.Delay(_options.CycleInterval, stoppingToken); //! defaut value: 1000ms
         }
     }
