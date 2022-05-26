@@ -51,6 +51,7 @@ public class Worker : BackgroundService
             }
 
             var pendingJobs = jobs.Where<WorkerJob>(j => j.Completed == null);
+            var tasks = new List<Task<IEnumerable<WorkerJob>>>();
 
             await Task.Run(async
                 () =>
@@ -58,13 +59,13 @@ public class Worker : BackgroundService
                     foreach (var job in pendingJobs)
                     {
 
-                        if (job.Status is not (Status)3 && job.Completed == null) //Complete
+                        if (job.Status is not WorkerJob.StatusType.Completed && job.Completed == null) //Complete
                         {
                             IterationCount++;
 
                             try
                             {
-                                job.Status = (Status)1; //Started
+                                job.Status = WorkerJob.StatusType.Started;
                                 Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
 
                                 PSDataCollection<PSObject> output = await _powerShellService.RunScript(
@@ -77,12 +78,12 @@ public class Worker : BackgroundService
                                 var logfile = File.ReadAllText(job.Path);
                                 if (logfile != null)
                                 {
-                                    job.Status = (Status)3; //Completed
+                                    job.Status = WorkerJob.StatusType.Completed;
                                     Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
                                 }
                                 else
                                 {
-                                    job.Status = (Status)2; //Cancelled
+                                    job.Status = WorkerJob.StatusType.Cancelled;
                                 }
 
                                 await _jobService.PutJobAsync(job);
@@ -90,7 +91,7 @@ public class Worker : BackgroundService
                             }
                             catch (Exception e)
                             {
-                                job.Status = (Status)2; //Cancelled
+                                job.Status = WorkerJob.StatusType.Cancelled;
                                 Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
                             }
                         }
@@ -98,15 +99,15 @@ public class Worker : BackgroundService
                 }
             );
 
-            await Task.WhenAll();
+            await Task.WhenAll(tasks);
 
 
             if (IterationCount != 0) 
             { 
                 IterationCount = 0; 
-                _logger.LogInformation("Jobs completed...");
                 stopwatch.Stop();
-                System.Console.WriteLine(stopwatch.ElapsedMilliseconds.ToString());   
+                _logger.LogInformation("Jobs completed..." + stopwatch.ElapsedMilliseconds.ToString());
+
             }
             Terminal.LogMessage(Terminal.MessageType.Info, "Looking for work...");
 

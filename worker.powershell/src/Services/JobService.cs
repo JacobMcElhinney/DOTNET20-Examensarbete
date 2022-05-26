@@ -23,7 +23,6 @@ namespace worker.powershell.src.Services
             {
                 try
                 {
-                    //! compare runtime value with: https://localhost:7065/api/Job
                     string uri = jobApiClient.BaseAddress.ToString() + "api/Job";
 
                     var streamTask = jobApiClient.GetStreamAsync(requestUri: uri);
@@ -45,15 +44,17 @@ namespace worker.powershell.src.Services
         {
             if (job.Status.ToString() == "Completed")
                 job.Completed = DateTime.Now;
+                
 
             using (HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient))
             {
 
                 var jsonJob = new StringContent(
-                    JsonSerializer.Serialize(job),
+                    JsonSerializer.Serialize<WorkerJob>(job),
                     Encoding.UTF8,
                     Application.Json);
 
+                
                 var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
                 httpResponseMessage.EnsureSuccessStatusCode();
             }

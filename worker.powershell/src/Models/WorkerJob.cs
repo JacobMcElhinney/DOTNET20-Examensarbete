@@ -13,39 +13,37 @@ namespace worker.powershell.src.Models
 
         [JsonPropertyName("description")]
         public string Description { get; set; }
-        
+
         [JsonPropertyName("path")]
         public string Path { get; set; }
 
         [JsonPropertyName("priority")]
-        public Priority Priority { get; set; }
+        public PriorityLevel Priority { get; set; }
 
-        [JsonPropertyName("jobType")]
-        public Status Status { get; set; }
-        
+        [JsonPropertyName("status")]
+        public StatusType Status { get; set; }
+
         [JsonPropertyName("created")]
         public DateTime Created { get; set; }
-        
+
         [JsonPropertyName("completed")]
         public DateTime? Completed { get; set; }
 
-    }
+        public enum PriorityLevel
+        {
+            Low, Meduium, High
+        }
 
-
-    public enum Priority
-    {
-        Low, Meduium, High
-    }
-
-   public enum Status
+        public enum StatusType
         {
             Pending,
             Started,
             Cancelled,
             Completed,
-            
+
         }
 
+    }
 
 }
 
