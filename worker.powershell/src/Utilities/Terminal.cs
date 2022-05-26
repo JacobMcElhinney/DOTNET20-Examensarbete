@@ -1,9 +1,9 @@
 namespace worker.powershell.src.Utilities
 {
     ///<Summary>
-    /// Enables colour coded terminal output to help visualise the control flow of asynchronous operations during runtime execution. Set "WorkerOptions:Logging" to true/fale to turn Assistant on/off. 
+    /// Enables colour coded terminal output to help visualise the control flow of asynchronous operations during runtime execution. Set "WorkerOptions:Logging" to true/fale to turn terminal logging on/off. 
     ///</Summary>
-    public static class DebuggingAssistant
+    public static class Terminal
     {
         public static bool? Logging { get; set; }
 

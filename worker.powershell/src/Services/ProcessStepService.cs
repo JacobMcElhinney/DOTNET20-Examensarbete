@@ -40,8 +40,8 @@ namespace worker.powershell.src.Services
                 }
                 catch (Exception e)
                 {
-                    DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, e.Message);
-                    DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "ProcessStepsService: Fake data returned for demonstration purposes");
+                    Terminal.LogMessage(Terminal.MessageType.Error, e.Message);
+                    Terminal.LogMessage(Terminal.MessageType.Info, "ProcessStepsService: Fake data returned for demonstration purposes");
                     return MockData.GenerateProcessStepsCollection();
                 }
     

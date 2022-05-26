@@ -23,7 +23,7 @@ public class Worker : BackgroundService
         _powerShellService = powerShellService;
         _jobService = jobService;
         // _processStepService = processStepService;
-        DebuggingAssistant.Logging = _options.Logging;
+        Terminal.Logging = _options.Logging;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,11 +32,12 @@ public class Worker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var jobs = await _jobService.GetJobsAsync();
+
             if (jobs is null)
             {
-                DebuggingAssistant.LogMessage(
-                DebuggingAssistant.MessageType.Error,
-                "Worker JobService failed. Press [ctrl + c] to exit application...");
+                Terminal.LogMessage(
+                Terminal.MessageType.Error,
+                "Worker JobService failed to connect. Press [ctrl + c] to exit application...");
                 break;
             }
 
@@ -52,20 +53,20 @@ public class Worker : BackgroundService
                     try
                     {
                         job.Status = (Status)1; //Started
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
+                        Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
 
                         PSDataCollection<PSObject> output = await _powerShellService.RunScript(
                             ScriptParser.GetScriptFromPath(job.Path));
                         foreach (PSObject item in output)
                         {
-                            DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
+                            Terminal.LogMessage(Terminal.MessageType.Info, $"PowerShellService: {item.BaseObject.ToString()}");
                         }
 
                         var logfile = File.ReadAllText(job.Path);
                         if (logfile != null)
                         {
                             job.Status = (Status)3; //Completed
-                            DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
+                            Terminal.LogMessage(Terminal.MessageType.Info, $"Job {IterationCount} Status: {job.Status.ToString()}");
                         }
                         else
                         {
@@ -78,13 +79,13 @@ public class Worker : BackgroundService
                     catch (Exception e)
                     {
                         job.Status = (Status)2; //Cancelled
-                        DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
+                        Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
                     }
                 }
             }
 
-
-            DebuggingAssistant.LogMessage(DebuggingAssistant.MessageType.Info, "Looking for work...");
+            if(IterationCount != 0) {IterationCount = 0; _logger.LogInformation("Jobs completed...");}
+            Terminal.LogMessage(Terminal.MessageType.Info, "Looking for work...");
 
             await Task.Delay(_options.CycleInterval, stoppingToken); //! defaut value: 1000ms
         }

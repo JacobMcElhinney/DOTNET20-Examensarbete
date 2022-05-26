@@ -38,3 +38,25 @@ namespace worker.powershell.src.Services
         }
     }
 }
+
+/*
+
+ // _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                // await Task.Delay(1000, stoppingToken);
+                using (PowerShell ps = PowerShell.Create())
+                {
+                    // specify the script code to run.
+                    ps.AddScript("scriptContents");
+                    
+                    // specify the parameters to pass into the script.
+                    ps.AddParameters(scriptParameters);
+
+                    // execute the script and await the result.
+                    var pipelineObjects = await ps.InvokeAsync().ConfigureAwait(false);
+
+                    // print the resulting pipeline objects to the console.
+                    foreach (var item in pipelineObjects)
+                    {
+                        Console.WriteLine(item.BaseObject.ToString());
+                    }
+*/
