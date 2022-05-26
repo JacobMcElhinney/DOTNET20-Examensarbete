@@ -34,7 +34,7 @@ namespace worker.powershell.src.Services
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(nameof(JobService) + " " + e.Message + ". Make sure API is running");
+                    System.Console.WriteLine($"{nameof(JobService)}: {e.Message}. Make sure API is running");
                     return null;
                 }
             }
@@ -59,6 +59,8 @@ namespace worker.powershell.src.Services
                 httpResponseMessage.EnsureSuccessStatusCode();
         }
 
+
+        //! For testing/demonstration purposes only.
         public async Task ResetJobsInDb(WorkerJob job)//! Remove after testing
         {
             job.Completed = null;
