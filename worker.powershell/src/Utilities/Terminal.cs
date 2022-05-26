@@ -20,7 +20,7 @@ namespace worker.powershell.src.Utilities
                 {
                     case MessageType.Info:
                         Console.ForegroundColor = ConsoleColor.Green;
-                        System.Console.WriteLine("INFO: " + message);
+                        System.Console.WriteLine("task: " + message);
                         Console.ForegroundColor = ConsoleColor.White;
 
                         break;

@@ -16,6 +16,8 @@ namespace worker.powershell.src.Models
         public string? Path { get; set; }
 
         public bool? Logging { get; set; }
+        public bool? TestData { get; set; }
+
         public string? SqlTestApi {get;set;}
         public string? LogApiBaseUrl { get; set; }
         public string? FlowApiBaseUrl { get; set; }

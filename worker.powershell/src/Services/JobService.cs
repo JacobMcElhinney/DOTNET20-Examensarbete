@@ -40,14 +40,14 @@ namespace worker.powershell.src.Services
             }
         }
 
-        public async Task PutJobAsync(WorkerJob job)
+        public async Task PutJobAsync(WorkerJob job) 
         {
             if (job.Status.ToString() == "Completed")
                 job.Completed = DateTime.Now;
                 
 
-            using (HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient))
-            {
+            HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient);
+            
 
                 var jsonJob = new StringContent(
                     JsonSerializer.Serialize<WorkerJob>(job),
@@ -57,7 +57,25 @@ namespace worker.powershell.src.Services
                 
                 var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
                 httpResponseMessage.EnsureSuccessStatusCode();
-            }
+        }
+
+        public async Task ResetJobsInDb(WorkerJob job)//! Remove after testing
+        {
+            job.Completed = null;
+            job.Status = WorkerJob.StatusType.Pending;
+
+            HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient);
+            
+
+                var jsonJob = new StringContent(
+                    JsonSerializer.Serialize<WorkerJob>(job),
+                    Encoding.UTF8,
+                    Application.Json);
+
+                
+                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
+                httpResponseMessage.EnsureSuccessStatusCode();
+            
         }
 
 

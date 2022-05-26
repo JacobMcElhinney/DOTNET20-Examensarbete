@@ -5,5 +5,7 @@ namespace worker.powershell.src.Interfaces
         Task<List<T>> GetJobsAsync();
         Task PutJobAsync(T job);
 
+        Task ResetJobsInDb(T job);
+
     }
 }
