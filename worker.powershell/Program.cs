@@ -22,8 +22,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<IJobService<WorkerJob>, JobService>();
 
         services.AddTransient<IPowerShellService, PowerShellService>();
-
-
+        
     }).Build();
 
 //.NET will start the worker service.
