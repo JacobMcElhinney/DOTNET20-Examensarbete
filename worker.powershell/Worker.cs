@@ -93,7 +93,8 @@ public class Worker : BackgroundService
                     catch (Exception e)
                     {
                         job.Status = WorkerJob.StatusType.Cancelled;
-                        Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status: {job.Status.ToString()}");
+                        Terminal.LogMessage(Terminal.MessageType.Error, $"{e.Message} Job status reverted to: {job.Status.ToString()}");
+
                     }
                 }
             }
