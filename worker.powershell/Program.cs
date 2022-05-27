@@ -14,15 +14,12 @@ IHost host = Host.CreateDefaultBuilder(args)
         //Bind WorkerOptions to configuration section by key and add WorkerOptions to DI container
         services.Configure<WorkerOptions>(configurationRoot.GetSection(key: nameof(WorkerOptions))); 
 
+        //Call extension method to register HttpClients and configure clients using IConfiguration instance.
         services.RegisterHttpClients(configurationRoot);
 
         services.AddHostedService<Worker>();
 
         services.AddTransient<IJobService<WorkerJob>, JobService>();
-         
-        // services.AddTransient<IProcessStepService<ProcessStep>, ProcessStepService>();
-
-        services.AddTransient<ILogService<Log>, LogService>();
 
         services.AddTransient<IPowerShellService, PowerShellService>();
 

@@ -5,14 +5,15 @@ using worker.powershell.src.Services;
 
 namespace worker.powershell.src.Extensions
 {
-    ///<Summary>
-    /// Extension methods for registring services and groups of related dependencies with the .NET Dependency Injection Container..
-    ///</Summary>
-    public static class ServiceExtensions //! consider using generics to make these HTTP extensions work with other DI containers e.g. AutoFac etc for future use.
+    ///<summary>
+    ///Provides Extension Methods for registring services and groups of related dependencies with the .NET Dependency Injection Container.
+    ///</summary>
+    public static class ServiceExtensions
     {
 
         public static void RegisterHttpClients(this IServiceCollection services, IConfiguration appSettingsConfiguration)
         {
+            //Developer note: the only HTTP Client fully implemented
             services.AddHttpClient<IJobService<WorkerJob>, JobService>(name: "JobApiClient", client => 
             {
                 try
@@ -26,8 +27,9 @@ namespace worker.powershell.src.Extensions
                 {
                     System.Console.WriteLine("Failed to register client JobApiClient: " +  e.Message);
                 }
-            }
-            ).SetHandlerLifetime(TimeSpan.FromMinutes(2));
+            }).SetHandlerLifetime(TimeSpan.FromMinutes(2));
+
+            //Developer note: the services listed below are yet to be fully implemented
 
             services.AddHttpClient<IProcessStepService<ProcessStep>, ProcessStepService>(name: "FlowApiClient", client =>
             {
@@ -77,12 +79,3 @@ namespace worker.powershell.src.Extensions
         }
     }
 }
-
-/*
-        DEVELOPER NOTES: to be removed
-            Whether we use extension methods or just the basic methods in Program.cs, we will reach a point where 
-            all of our services are now in our container. But how do we inject them into dependent classes?
-
-            try: https://exceptionnotfound.net/dependency-injection-in-dotnet-6-adding-and-injecting-dependencies/
-
-*/

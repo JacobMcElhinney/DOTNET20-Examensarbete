@@ -24,5 +24,15 @@
   "status": 0
 }
 
+{
+  "title": "Show Execution Policy",
+  "description": "Run ShowExecutionPolicy.ps1 to get execution policy",
+  "path": ".\\src\\Scripts\\ShowExecutionPolicy.ps1",
+  "priority": 2,
+  "status": 0
+}
+
+
+
 
 ```

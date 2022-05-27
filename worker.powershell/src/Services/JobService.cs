@@ -6,6 +6,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace worker.powershell.src.Services
 {
+    ///<Summary>
+    /// Calls external API, returns WorkerJobs and updates the status of WorkerJobs once processed by the Woker.
+    ///</Summary>
     public class JobService : IJobService<WorkerJob>
     {
         private readonly IHttpClientFactory _httpClientFactory;
