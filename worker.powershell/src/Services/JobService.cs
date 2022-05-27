@@ -45,44 +45,34 @@ namespace worker.powershell.src.Services
 
         public async Task PutJobAsync(WorkerJob job) 
         {
-            if (job.Status.ToString() == "Completed")
-                job.Completed = DateTime.Now;
+            if (job.Status.ToString() == "Completed") job.Completed = DateTime.Now;
                 
-
             HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient);
             
+            var jsonJob = new StringContent(
+                JsonSerializer.Serialize<WorkerJob>(job),
+                Encoding.UTF8,
+                Application.Json);
 
-                var jsonJob = new StringContent(
-                    JsonSerializer.Serialize<WorkerJob>(job),
-                    Encoding.UTF8,
-                    Application.Json);
-
-                
-                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob);
-                httpResponseMessage.EnsureSuccessStatusCode();
+            var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob);
+            httpResponseMessage.EnsureSuccessStatusCode();
         }
 
-
-        //! For testing/demonstration purposes only.
-        public async Task ResetJobsInDb(WorkerJob job)//! Remove after development phase is concluded.
+        //! For testing/demonstration purposes only. Remove member method after development phase is concluded.
+        public async Task ResetJobsInDb(WorkerJob job)
         {
             job.Completed = null;
             job.Status = WorkerJob.StatusType.Pending;
 
             HttpClient jobApiClient = _httpClientFactory.CreateClient(_namedClient);
-            
 
-                var jsonJob = new StringContent(
-                    JsonSerializer.Serialize<WorkerJob>(job),
-                    Encoding.UTF8,
-                    Application.Json);
-
-                
-                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
-                httpResponseMessage.EnsureSuccessStatusCode();
+            var jsonJob = new StringContent(
+                JsonSerializer.Serialize<WorkerJob>(job),
+                Encoding.UTF8,
+                Application.Json);
             
+            var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
+            httpResponseMessage.EnsureSuccessStatusCode();
         }
-
-
     }
 }

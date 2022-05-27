@@ -26,7 +26,6 @@ namespace worker.powershell.src.Services
                 {
                     return error.Message;
                 }
-
             }
         }
     }

@@ -1,5 +1,5 @@
 # DOTNET20-Examensarbete
-Smesh Workflow Engine
+Generic Workflow Engine
 
 ## Useful links
 - [Use the new programming style](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#use-the-new-program-style)
