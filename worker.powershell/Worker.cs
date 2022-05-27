@@ -18,9 +18,6 @@ public class Worker : BackgroundService
     private readonly IJobService<WorkerJob> _jobService;
     private int IterationCount { get; set; }
 
-
-
-
     //Constructor called once, when resolved from Dependency Injection container in Program.cs
     public Worker(ILogger<Worker> logger, IOptions<WorkerOptions> options, IPowerShellService powerShellService, IJobService<WorkerJob> jobService)
     {
@@ -47,8 +44,7 @@ public class Worker : BackgroundService
             if (jobs is null)
             {
                 Terminal.LogMessage(
-                Terminal.MessageType.Error,
-                "Worker JobService failed to connect. Press [ctrl + c] to exit application...");
+                    Terminal.MessageType.Error, "Worker JobService failed to connect. Press [ctrl + c] to exit application...");
                 break;
             }
 
@@ -102,15 +98,23 @@ public class Worker : BackgroundService
                 }
             }
 
-
-            //If TestData in appsettings.Development.json is set to true, reset each job's status in the database, allowing them to be performed once more. 
-            if (_options.TestData == true)
+            //If TestData in appsettings.Development.json is set to true, try to reset each job's status in the database, allowing them to be performed once more. 
+            try
             {
-                foreach (var job in jobs)
-                    await _jobService.ResetJobsInDb(job);
+                if (_options.TestData == true)
+                {
+                    foreach (var job in jobs)
+                    {
+                        await _jobService.ResetJobsInDb(job);
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Terminal.LogMessage(Terminal.MessageType.Error, e.Message);
             }
 
-            //Delay
+            //Delay loop iteration (cycleInterval) to save compute power and costs once deployed as an Azure WebJob. 
             await Task.Delay(_options.CycleInterval, stoppingToken);
         }
     }

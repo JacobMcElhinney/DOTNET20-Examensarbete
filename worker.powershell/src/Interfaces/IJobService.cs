@@ -5,7 +5,7 @@ namespace worker.powershell.src.Interfaces
         Task<List<T>> GetJobsAsync();
         Task PutJobAsync(T job);
 
-        //Developer note: For testing purposes only.
+        //Developer note: remove method after development phase concludes.
         Task ResetJobsInDb(T job);
 
     }

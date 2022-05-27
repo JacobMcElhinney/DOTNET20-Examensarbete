@@ -58,13 +58,13 @@ namespace worker.powershell.src.Services
                     Application.Json);
 
                 
-                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob); //api/Job/{id}
+                var httpResponseMessage = await jobApiClient.PutAsync(requestUri: $"/api/Job/{job.Id}", jsonJob);
                 httpResponseMessage.EnsureSuccessStatusCode();
         }
 
 
         //! For testing/demonstration purposes only.
-        public async Task ResetJobsInDb(WorkerJob job)//! Remove after testing
+        public async Task ResetJobsInDb(WorkerJob job)//! Remove after development phase is concluded.
         {
             job.Completed = null;
             job.Status = WorkerJob.StatusType.Pending;

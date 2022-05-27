@@ -24,36 +24,36 @@ namespace worker.powershell.src.Utilities
         private static HttpClient Client = new HttpClient();
         //Used to display repository names
 
-        public static List<ProcessStep> GenerateProcessStepsCollection()
-        {
+        // public static List<ProcessStep> GenerateProcessStepsCollection()
+        // {
 
-            ProcessStep fakeStep1 = new() { Agent = "Cloud", Language = "English", Parameters = null, Path = "a" };
-            ProcessStep fakeStep2 = new() { Agent = "Local", Language = "Swedish", Parameters = null, Path = "b" };
-            var processSteps = new List<ProcessStep>();
-            processSteps.Add(fakeStep1);
-            processSteps.Add(fakeStep2);
-            return processSteps;
-        }
+        //     ProcessStep fakeStep1 = new() { Agent = "Cloud", Language = "English", Parameters = null, Path = "a" };
+        //     ProcessStep fakeStep2 = new() { Agent = "Local", Language = "Swedish", Parameters = null, Path = "b" };
+        //     var processSteps = new List<ProcessStep>();
+        //     processSteps.Add(fakeStep1);
+        //     processSteps.Add(fakeStep2);
+        //     return processSteps;
+        // }
 
-        public static Log GenerateLog()
-        {
-            Log fakeLog = new()
-            {
-                ProcessId = "test process",
-                ProcessStep = 1,
-                Serverity = Log.LogSeverity.Information.ToString(),
-                Timestamp = DateTime.Now,
-                User = "test",
-                Message = "test"
-            };
-            return fakeLog;
-        }
+        // public static Log GenerateLog()
+        // {
+        //     Log fakeLog = new()
+        //     {
+        //         ProcessId = "test process",
+        //         ProcessStep = 1,
+        //         Serverity = Log.LogSeverity.Information.ToString(),
+        //         Timestamp = DateTime.Now,
+        //         User = "test",
+        //         Message = "test"
+        //     };
+        //     return fakeLog;
+        // }
 
-        public static ProcessStep GenerateProcessStep()
-        {
-            var fakeProcessStep = new ProcessStep() { Agent = "test", Language = "test", Path = "test" };
-            return fakeProcessStep;
-        }
+        // public static ProcessStep GenerateProcessStep()
+        // {
+        //     var fakeProcessStep = new ProcessStep() { Agent = "test", Language = "test", Path = "test" };
+        //     return fakeProcessStep;
+        // }
 
         public static async Task GetReposRequest()
         {

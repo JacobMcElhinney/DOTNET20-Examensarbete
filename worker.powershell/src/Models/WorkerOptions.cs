@@ -32,7 +32,7 @@ namespace worker.powershell.src.Models
     }
 
     /* DEVELOPER NOTES:
-        Please refer to the documentation
+        For further information please refer to the documentation
         https://docs.microsoft.com/en-us/dotnet/core/extensions/options
         
     */
