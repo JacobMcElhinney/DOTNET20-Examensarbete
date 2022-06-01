@@ -60,6 +60,6 @@ To disable this behaviour open `worker.powershell\appsettings.Development.json` 
 
 ```
 
-I recommed putting a breakpoint at line 55 in the Test api `JobController.cs` to better visualise the control flow or simply step through the application during debugging.
+I recommed putting a breakpoint at line 55 in the Test api `JobController.cs` to better visualise the control flow or simply step through the `worker service` application during debugging. 
 
 Feel free try any of the sample json requests from `swagger.md` with the OpenAPi/Swagger interface (`https://localhost:7065/swagger/index.html`) if you want to try to add Jobs to the SQL Database.
